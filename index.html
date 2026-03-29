@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bolted — Custom Skateboard Builds</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23080808'/><text y='82' x='50' font-family='Georgia,serif' font-size='85' font-weight='700' fill='%23FFE000' text-anchor='middle'>B</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #080808;
+    --white: #f5f5f0;
+    --yellow: #FFE000;
+    --red: #FF2D00;
+    --gray: #1a1a1a;
+    --mid: #333;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Space Mono', monospace;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: var(--yellow);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--yellow);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease-out, width 0.3s, height 0.3s, opacity 0.3s;
+    opacity: 0.5;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 48px;
+    mix-blend-mode: difference;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.15em;
+    color: var(--white);
+  }
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; }
+
+  /* HERO */
+  .hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-noise {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .hero-lines {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .hero-lines span {
+    position: absolute;
+    display: block;
+    background: var(--yellow);
+    opacity: 0.04;
+  }
+  .hero-lines span:nth-child(1) { width: 1px; height: 100%; left: 33%; animation: linePulse 4s ease-in-out infinite; }
+  .hero-lines span:nth-child(2) { width: 1px; height: 100%; left: 66%; animation: linePulse 4s ease-in-out infinite 1s; }
+  .hero-lines span:nth-child(3) { width: 100%; height: 1px; top: 50%; animation: linePulse 4s ease-in-out infinite 2s; }
+
+  @keyframes linePulse {
+    0%, 100% { opacity: 0.03; }
+    50% { opacity: 0.08; }
+  }
+
+  .hero-tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s ease forwards 0.3s;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(6rem, 18vw, 18rem);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: fadeUp 0.9s ease forwards 0.5s;
+  }
+
+  .hero-title .outline {
+    -webkit-text-stroke: 2px var(--white);
+    color: transparent;
+  }
+
+  .hero-subtitle {
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    color: var(--white);
+    opacity: 0;
+    max-width: 360px;
+    line-height: 1.8;
+    margin-top: 32px;
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 0.9s ease forwards 0.8s;
+    transform: translateY(20px);
+  }
+
+  .hero-cta {
+    margin-top: 48px;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards 1s;
+    transform: translateY(20px);
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 16px 40px;
+    background: var(--yellow);
+    color: var(--black);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 0 var(--red);
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    right: 48px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    animation: fadeUp 1s ease forwards 1.5s;
+    opacity: 0;
+  }
+  .hero-scroll::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--white);
+    animation: lineGrow 1.5s ease forwards 1.8s;
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+  @keyframes lineGrow {
+    to { transform: scaleX(1); opacity: 0.4; }
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* BIG BOARD NUMBER — decorative */
+  .hero-number {
+    position: absolute;
+    right: -20px;
+    bottom: -60px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30vw;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.04);
+    pointer-events: none;
+    z-index: 1;
+    user-select: none;
+  }
+
+  /* ─── SCROLL SECTIONS ─── */
+
+  /* MARQUEE */
+  .marquee-wrap {
+    background: var(--yellow);
+    padding: 20px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .marquee-track {
+    display: inline-flex;
+    animation: marquee 14s linear infinite;
+  }
+  .marquee-track span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.2em;
+    color: var(--black);
+    padding: 0 48px;
+  }
+  .marquee-track span.dot {
+    color: var(--red);
+    padding: 0;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ABOUT / STICKY PIN SECTION */
+  .about-section {
+    min-height: 200vh;
+    position: relative;
+  }
+  .about-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+  }
+  .about-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 64px;
+    position: relative;
+  }
+  .about-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 32px;
+  }
+  .about-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 6vw, 6rem);
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+  .about-heading .accent { color: var(--yellow); }
+  .about-body {
+    margin-top: 32px;
+    font-size: 0.8rem;
+    line-height: 2;
+    color: rgba(245,245,240,0.6);
+    max-width: 400px;
+  }
+  .about-right {
+    background: var(--gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Animated board illustration */
+  .board-illustration {
+    position: relative;
+    width: 200px;
+  }
+  .board-deck {
+    width: 80px;
+    height: 260px;
+    background: linear-gradient(135deg, #222, #111);
+    border-radius: 20px 20px 28px 28px;
+    margin: 0 auto;
+    position: relative;
+    transform-origin: center;
+    animation: boardFloat 4s ease-in-out infinite;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+  .board-deck::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border-radius: 16px 16px 22px 22px;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 3px,
+      rgba(255,224,0,0.06) 3px,
+      rgba(255,224,0,0.06) 6px
+    );
+  }
+  .board-deck::after {
+    content: 'BOLTED';
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.25em;
+    color: var(--yellow);
+    white-space: nowrap;
+  }
+  .board-trucks {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 16px;
+    background: #888;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  }
+  .board-trucks.top { top: 32px; }
+  .board-trucks.bottom { bottom: 32px; }
+  .wheel {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    background: var(--white);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: inset 0 0 0 3px #ddd, 0 4px 10px rgba(0,0,0,0.4);
+  }
+  .wheel.l { left: -8px; }
+  .wheel.r { right: -8px; }
+  @keyframes boardFloat {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-20px) rotate(3deg); }
+  }
+  .about-glow {
+    position: absolute;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(255,224,0,0.08), transparent 70%);
+    border-radius: 50%;
+    animation: glowPulse 3s ease-in-out infinite;
+  }
+  @keyframes glowPulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.2); opacity: 1; }
+  }
+
+  /* HOW IT WORKS — scroll reveal cards */
+  .steps-section {
+    padding: 140px 48px;
+    position: relative;
+  }
+  .steps-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .steps-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 6rem);
+    text-align: center;
+    letter-spacing: 0.04em;
+    margin-bottom: 100px;
+  }
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .step-card {
+    background: var(--gray);
+    padding: 56px 40px;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 0.7s ease, transform 0.7s ease, background 0.3s;
+  }
+  .step-card:hover { background: #222; }
+  .step-card.visible { opacity: 1; transform: translateY(0); }
+  .step-card:nth-child(2) { transition-delay: 0.1s; }
+  .step-card:nth-child(3) { transition-delay: 0.2s; }
+  .step-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,224,0,0.3);
+    line-height: 1;
+    margin-bottom: 24px;
+  }
+  .step-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+  }
+  .step-body {
+    font-size: 0.75rem;
+    line-height: 1.9;
+    color: rgba(245,245,240,0.5);
+  }
+  .step-bar {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px;
+    width: 0;
+    background: var(--yellow);
+    transition: width 0.6s ease 0.4s;
+  }
+  .step-card.visible .step-bar { width: 100%; }
+
+  /* PRICING SECTION */
+  .pricing-section {
+    padding: 140px 48px;
+    background: var(--white);
+    color: var(--black);
+  }
+  .pricing-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .pricing-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 6rem);
+    text-align: center;
+    letter-spacing: 0.04em;
+    margin-bottom: 80px;
+    color: var(--black);
+  }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .price-card {
+    padding: 48px 36px;
+    background: #f0f0eb;
+    position: relative;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .price-card.visible { opacity: 1; transform: translateY(0); }
+  .price-card:nth-child(2) { transition-delay: 0.1s; background: var(--black); color: var(--white); }
+  .price-card:nth-child(3) { transition-delay: 0.2s; }
+  .price-card.featured::before {
+    content: 'POPULAR';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--yellow);
+    color: var(--black);
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    padding: 4px 16px;
+    font-weight: 700;
+  }
+  .price-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .price-desc {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: 32px;
+  }
+  .price-features {
+    list-style: none;
+    font-size: 0.75rem;
+    line-height: 2.2;
+  }
+  .price-features li::before {
+    content: '→ ';
+    color: var(--yellow);
+  }
+  .price-card:nth-child(2) .price-features li::before { color: var(--yellow); }
+
+  /* CREW */
+  .crew-section {
+    padding: 140px 48px;
+    text-align: center;
+  }
+  .crew-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 16px;
+  }
+  .crew-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 6rem);
+    letter-spacing: 0.04em;
+    margin-bottom: 80px;
+  }
+  .crew-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .crew-card {
+    background: var(--gray);
+    padding: 48px 24px;
+    opacity: 0;
+    transform: translateY(40px) scale(0.96);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .crew-card.visible { opacity: 1; transform: translateY(0) scale(1); }
+  .crew-card:nth-child(2) { transition-delay: 0.1s; }
+  .crew-card:nth-child(3) { transition-delay: 0.2s; }
+  .crew-card:nth-child(4) { transition-delay: 0.3s; }
+  .crew-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: var(--mid);
+    margin: 0 auto 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: var(--yellow);
+    position: relative;
+    overflow: hidden;
+  }
+  .crew-avatar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid var(--yellow);
+    opacity: 0.3;
+  }
+  .crew-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  .crew-role {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(245,245,240,0.4);
+  }
+
+  /* CTA SECTION */
+  .cta-section {
+    padding: 160px 48px;
+    background: var(--yellow);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28vw;
+    color: transparent;
+    -webkit-text-stroke: 2px rgba(0,0,0,0.06);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .cta-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 9vw, 10rem);
+    color: var(--black);
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 40px;
+  }
+  .cta-sub {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: rgba(0,0,0,0.5);
+    margin-bottom: 48px;
+    position: relative;
+    z-index: 1;
+  }
+  .btn-dark {
+    display: inline-block;
+    padding: 18px 48px;
+    background: var(--black);
+    color: var(--yellow);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-dark:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 0 var(--red);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--black);
+    border-top: 1px solid #1a1a1a;
+    padding: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.15em;
+  }
+  .footer-copy {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: rgba(245,245,240,0.3);
+  }
+  .footer-right {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: rgba(245,245,240,0.3);
+    text-align: right;
+  }
+
+  /* PARALLAX BG STRIP */
+  .parallax-strip {
+    height: 300px;
+    background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0f0f0f 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .parallax-inner {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 12vw, 12rem);
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,224,0,0.15);
+    will-change: transform;
+    white-space: nowrap;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    nav { padding: 24px; }
+    .hero { padding: 0 24px; }
+    .about-sticky { grid-template-columns: 1fr; }
+    .about-right { display: none; }
+    .steps-grid, .pricing-grid, .crew-grid { grid-template-columns: 1fr; }
+    .steps-section, .pricing-section, .crew-section, .cta-section { padding: 80px 24px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+    .footer-right { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <div class="nav-logo">Bolted</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#how">Process</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#games">Games</a></li>
+    <li><a href="#crew">Crew</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-lines">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="hero-noise"></div>
+  <div class="hero-tag">Custom Skateboard Builds — Est. 2025</div>
+  <h1 class="hero-title">
+    BOL<br><span class="outline">TED</span>
+  </h1>
+  <p class="hero-subtitle">You bring the parts. We build your perfect board. Local. Handbuilt. Dialed.</p>
+  <div class="hero-cta">
+    <a href="#how" class="btn">Get Your Board Built →</a>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+  <div class="hero-number">B</div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>CUSTOM BUILDS</span><span class="dot">✦</span>
+    <span>DIALED SETUPS</span><span class="dot">✦</span>
+    <span>BRING YOUR PARTS</span><span class="dot">✦</span>
+    <span>WE BOLT IT UP</span><span class="dot">✦</span>
+    <span>BOLTED</span><span class="dot">✦</span>
+    <span>CUSTOM BUILDS</span><span class="dot">✦</span>
+    <span>DIALED SETUPS</span><span class="dot">✦</span>
+    <span>BRING YOUR PARTS</span><span class="dot">✦</span>
+    <span>WE BOLT IT UP</span><span class="dot">✦</span>
+    <span>BOLTED</span><span class="dot">✦</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="about-sticky">
+    <div class="about-left">
+      <div class="about-label">Who We Are</div>
+      <h2 class="about-heading">Built By<br><span class="accent">Skaters,</span><br>For Skaters.</h2>
+      <p class="about-body">we're a small crew that knows how a board should feel. bring us your deck, trucks, wheels, and hardware — we put it all together properly, every time. no cap.</p>
+    </div>
+    <div class="about-right">
+      <div class="about-glow"></div>
+      <div class="board-illustration">
+        <div class="board-deck">
+          <div class="board-trucks top">
+            <div class="wheel l"></div>
+            <div class="wheel r"></div>
+          </div>
+          <div class="board-trucks bottom">
+            <div class="wheel l"></div>
+            <div class="wheel r"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARALLAX STRIP -->
+<div class="parallax-strip">
+  <div class="parallax-inner" id="parallaxText">PUSH — GRIND — BOLTED — BUILD —</div>
+</div>
+
+<!-- STEPS -->
+<section class="steps-section" id="how">
+  <div class="steps-label">The Process</div>
+  <h2 class="steps-heading">How It Works</h2>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-number">01</div>
+      <div class="step-title">Bring Your Parts</div>
+      <p class="step-body">Deck, trucks, wheels, bearings, hardware. You source everything — we handle the rest.</p>
+      <div class="step-bar"></div>
+    </div>
+    <div class="step-card">
+      <div class="step-number">02</div>
+      <div class="step-title">We Build It</div>
+      <p class="step-body">Grip tape pressed clean, trucks torqued right, bearings seated perfectly. No shortcuts.</p>
+      <div class="step-bar"></div>
+    </div>
+    <div class="step-card">
+      <div class="step-number">03</div>
+      <div class="step-title">Ride Out</div>
+      <p class="step-body">Pick up your freshly built board and hit the streets. Dialed and ready to skate.</p>
+      <div class="step-bar"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="pricing-label">Pricing</div>
+  <h2 class="pricing-heading">One Price.<br>No BS.</h2>
+  <div style="max-width:500px;margin:0 auto;text-align:center;">
+    <div class="price-card featured visible" style="padding:80px 48px;background:var(--black);color:var(--white);display:inline-block;width:100%;">
+      <div class="price-amount" style="font-size:7rem;">$40</div>
+      <div class="price-desc" style="font-size:0.85rem;margin-bottom:40px;">Full Board Assembly</div>
+      <ul class="price-features" style="text-align:left;font-size:0.8rem;">
+        <li>You bring all the parts</li>
+        <li>We put it all together</li>
+        <li>Grip tape, trucks, wheels & bearings</li>
+        <li>Ready to skate same day</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- GAMES -->
+<section id="games" style="padding:140px 48px;background:#0d0d0d;">
+  <div style="font-size:0.6rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--yellow);margin-bottom:16px;text-align:center;">Mini Games</div>
+  <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6vw,6rem);text-align:center;letter-spacing:0.04em;margin-bottom:60px;">Kill Time While<br>We Build</h2>
+
+  <!-- GAME TABS -->
+  <div style="display:flex;gap:2px;max-width:900px;margin:0 auto 40px;justify-content:center;">
+    <button onclick="switchGame('skater')" id="tab-skater" style="padding:14px 32px;background:var(--yellow);color:var(--black);font-family:'Space Mono',monospace;font-size:0.7rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;border:none;cursor:pointer;">🛹 Skate Run</button>
+    <button onclick="switchGame('tricks')" id="tab-tricks" style="padding:14px 32px;background:#1a1a1a;color:var(--white);font-family:'Space Mono',monospace;font-size:0.7rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;border:none;cursor:pointer;">🔥 Trick Master</button>
+  </div>
+
+  <!-- SKATE RUN GAME -->
+  <div id="game-skater" style="max-width:900px;margin:0 auto;">
+    <canvas id="skateCanvas" width="900" height="320" style="width:100%;background:#111;display:block;border:1px solid #222;"></canvas>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding:0 4px;">
+      <div style="font-size:0.7rem;color:rgba(245,245,240,0.4);letter-spacing:0.1em;">SPACE / TAP to jump &nbsp;|&nbsp; DOUBLE JUMP for grind</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--yellow);">SCORE: <span id="skateScore">0</span></div>
+    </div>
+  </div>
+
+  <!-- TRICK MASTER GAME -->
+  <div id="game-tricks" style="max-width:900px;margin:0 auto;display:none;">
+    <div style="background:#111;border:1px solid #222;padding:48px;text-align:center;min-height:320px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;">
+      <div id="trickCombo" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,4rem);color:var(--yellow);margin-bottom:24px;min-height:60px;"></div>
+      <div id="trickInstruction" style="font-size:0.8rem;color:rgba(245,245,240,0.5);margin-bottom:40px;letter-spacing:0.1em;">press start to get a trick combo</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;" id="trickKeys"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:20px;" id="trickBtns"></div>
+      <div style="position:absolute;top:24px;right:32px;font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--white);">SCORE: <span id="trickScore">0</span></div>
+      <div style="position:absolute;top:24px;left:32px;font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:rgba(245,245,240,0.3);">STREAK: <span id="trickStreak">0</span>🔥</div>
+      <div id="trickResult" style="position:absolute;bottom:24px;font-family:'Bebas Neue',sans-serif;font-size:2rem;opacity:0;transition:opacity 0.3s;"></div>
+    </div>
+    <div style="display:flex;justify-content:center;margin-top:20px;">
+      <button onclick="startTrickGame()" style="padding:16px 48px;background:var(--yellow);color:var(--black);font-family:'Space Mono',monospace;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;border:none;cursor:pointer;">Start →</button>
+    </div>
+  </div>
+</section>
+
+<script>
+// ─── GAME TAB SWITCHER ───
+function switchGame(id) {
+  document.getElementById('game-skater').style.display = id === 'skater' ? 'block' : 'none';
+  document.getElementById('game-tricks').style.display = id === 'tricks' ? 'block' : 'none';
+  document.getElementById('tab-skater').style.background = id === 'skater' ? 'var(--yellow)' : '#1a1a1a';
+  document.getElementById('tab-skater').style.color = id === 'skater' ? 'var(--black)' : 'var(--white)';
+  document.getElementById('tab-tricks').style.background = id === 'tricks' ? 'var(--yellow)' : '#1a1a1a';
+  document.getElementById('tab-tricks').style.color = id === 'tricks' ? 'var(--black)' : 'var(--white)';
+}
+
+// ─── SKATE RUN GAME ───
+(function() {
+  const canvas = document.getElementById('skateCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const GROUND = H - 60;
+
+  let skater, obstacles, particles, score, speed, frame, raf, running, jumpCount;
+
+  const tricks = ['KICKFLIP!','HEELFLIP!','360 FLIP!','OLLIE!','NOLLIE!','FAKIE!','GRIND!','MANUAL!'];
+
+  function init() {
+    skater = { x: 120, y: GROUND, w: 44, h: 52, vy: 0, jumping: false, trick: '', trickTimer: 0, frame: 0 };
+    obstacles = [];
+    particles = [];
+    score = 0;
+    speed = 5;
+    frame = 0;
+    jumpCount = 0;
+    running = true;
+    document.getElementById('skateScore').textContent = '0';
+    loop();
+  }
+
+  function jump() {
+    if (jumpCount < 2) {
+      skater.vy = jumpCount === 0 ? -11 : -9;
+      skater.jumping = true;
+      jumpCount++;
+      if (jumpCount === 2) {
+        skater.trick = tricks[Math.floor(Math.random() * tricks.length)];
+        skater.trickTimer = 50;
+        spawnParticles(skater.x + skater.w/2, skater.y + skater.h/2, '#FFE000');
+      }
+    }
+  }
+
+  function spawnParticles(x, y, color) {
+    for (let i = 0; i < 10; i++) {
+      particles.push({ x, y, vx: (Math.random()-0.5)*6, vy: (Math.random()-0.5)*6, alpha: 1, color });
+    }
+  }
+
+  function loop() {
+    if (!running) return;
+    ctx.clearRect(0, 0, W, H);
+
+    // Background city silhouette
+    ctx.fillStyle = '#0d0d0d';
+    ctx.fillRect(0, 0, W, H);
+
+    // Stars
+    if (frame % 3 === 0) {
+      ctx.fillStyle = 'rgba(255,255,255,0.3)';
+      for (let i = 0; i < 3; i++) {
+        ctx.fillRect(Math.random() * W, Math.random() * (GROUND - 40), 2, 2);
+      }
+    }
+
+    // Ground
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(0, GROUND + 52, W, H - GROUND - 52);
+
+    // Ground line
+    ctx.strokeStyle = '#FFE000';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(0, GROUND + 52);
+    ctx.lineTo(W, GROUND + 52);
+    ctx.stroke();
+
+    // Dashed road markings
+    ctx.strokeStyle = '#333';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([30, 20]);
+    ctx.beginPath();
+    ctx.moveTo(frame % 50 - 50, GROUND + 70);
+    ctx.lineTo(W, GROUND + 70);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Skater physics
+    skater.vy += 0.8;
+    skater.y += skater.vy;
+    if (skater.y >= GROUND) {
+      skater.y = GROUND;
+      skater.vy = 0;
+      skater.jumping = false;
+      jumpCount = 0;
+    }
+
+    // Animate skater legs
+    skater.frame = Math.floor(frame / 8) % 4;
+
+    // Draw skater
+    const sx = skater.x, sy = skater.y;
+    // Board
+    ctx.fillStyle = skater.jumping ? '#FFE000' : '#cccccc';
+    ctx.fillRect(sx - 4, sy + 44, 52, 8);
+    ctx.fillStyle = '#333';
+    ctx.fillRect(sx, sy + 50, 10, 4); // truck
+    ctx.fillRect(sx + 32, sy + 50, 10, 4);
+    // Wheels
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(sx + 5, sy + 56, 5, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(sx + 39, sy + 56, 5, 0, Math.PI*2); ctx.fill();
+    // Body
+    ctx.fillStyle = '#FFE000';
+    ctx.fillRect(sx + 8, sy + 16, 20, 28); // torso
+    // Head
+    ctx.fillStyle = '#f5c89a';
+    ctx.beginPath(); ctx.arc(sx + 18, sy + 10, 10, 0, Math.PI*2); ctx.fill();
+    // Arms
+    const armSway = Math.sin(frame * 0.15) * 4;
+    ctx.strokeStyle = '#FFE000'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(sx + 8, sy + 22); ctx.lineTo(sx - 4, sy + 32 + armSway); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(sx + 28, sy + 22); ctx.lineTo(sx + 40, sy + 32 - armSway); ctx.stroke();
+    // Legs
+    const legSway = skater.jumping ? 8 : Math.sin(frame * 0.3) * 5;
+    ctx.beginPath(); ctx.moveTo(sx + 12, sy + 44); ctx.lineTo(sx + 6, sy + 50 + legSway); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(sx + 22, sy + 44); ctx.lineTo(sx + 28, sy + 50 - legSway); ctx.stroke();
+
+    // Trick text
+    if (skater.trickTimer > 0) {
+      ctx.font = `bold ${Math.min(28, skater.trickTimer)}px 'Bebas Neue', sans-serif`;
+      ctx.fillStyle = `rgba(255,224,0,${skater.trickTimer/50})`;
+      ctx.textAlign = 'center';
+      ctx.fillText(skater.trick, sx + 18, sy - 10);
+      ctx.textAlign = 'left';
+      skater.trickTimer--;
+    }
+
+    // Obstacles
+    frame++;
+    speed = 5 + Math.floor(score / 300) * 0.5;
+
+    if (frame % Math.max(55, 90 - Math.floor(score/200)) === 0) {
+      const types = ['cone','rail','gap'];
+      const t = types[Math.floor(Math.random() * types.length)];
+      obstacles.push({ x: W + 20, type: t,
+        w: t === 'rail' ? 80 : t === 'gap' ? 60 : 20,
+        h: t === 'cone' ? 30 : t === 'rail' ? 14 : 0 });
+    }
+
+    obstacles.forEach((ob, i) => {
+      ob.x -= speed;
+      const oy = GROUND + 52 - ob.h;
+
+      if (ob.type === 'cone') {
+        ctx.fillStyle = '#FF2D00';
+        ctx.beginPath();
+        ctx.moveTo(ob.x + 10, oy - 20);
+        ctx.lineTo(ob.x, oy);
+        ctx.lineTo(ob.x + 20, oy);
+        ctx.fill();
+        ctx.fillStyle = 'white';
+        ctx.fillRect(ob.x + 2, oy - 8, 16, 4);
+      } else if (ob.type === 'rail') {
+        ctx.fillStyle = '#888';
+        ctx.fillRect(ob.x, oy, ob.w, ob.h);
+        ctx.fillStyle = '#aaa';
+        ctx.fillRect(ob.x, oy, ob.w, 3);
+        ctx.fillRect(ob.x, oy, 4, ob.h);
+        ctx.fillRect(ob.x + ob.w - 4, oy, 4, ob.h);
+      } else if (ob.type === 'gap') {
+        ctx.fillStyle = '#080808';
+        ctx.fillRect(ob.x, GROUND + 52, ob.w, 30);
+        ctx.strokeStyle = '#FF2D00';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(ob.x, GROUND + 52, ob.w, 30);
+      }
+
+      // Collision
+      const hit = skater.x + skater.w - 8 > ob.x + 4 &&
+                  skater.x + 8 < ob.x + ob.w - 4 &&
+                  skater.y + skater.h > oy - 4 &&
+                  (ob.type !== 'gap' || skater.y + skater.h >= GROUND);
+      if (ob.type === 'gap') {
+        const inGap = skater.x + skater.w/2 > ob.x && skater.x + skater.w/2 < ob.x + ob.w;
+        if (inGap && skater.y >= GROUND) { gameOver(); return; }
+      } else if (hit) { gameOver(); return; }
+
+      if (ob.x + ob.w < 0) obstacles.splice(i, 1);
+    });
+
+    // Particles
+    particles.forEach((p, i) => {
+      p.x += p.vx; p.y += p.vy; p.alpha -= 0.04;
+      ctx.globalAlpha = Math.max(0, p.alpha);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(p.x, p.y, 4, 4);
+      if (p.alpha <= 0) particles.splice(i, 1);
+    });
+    ctx.globalAlpha = 1;
+
+    // Score
+    score++;
+    document.getElementById('skateScore').textContent = score;
+
+    // HUD speed indicator
+    ctx.font = "12px 'Space Mono', monospace";
+    ctx.fillStyle = 'rgba(255,224,0,0.3)';
+    ctx.fillText(`SPEED x${(speed).toFixed(1)}`, 20, 30);
+
+    raf = requestAnimationFrame(loop);
+  }
+
+  function gameOver() {
+    running = false;
+    cancelAnimationFrame(raf);
+    ctx.fillStyle = 'rgba(8,8,8,0.85)';
+    ctx.fillRect(0, 0, W, H);
+    ctx.font = "bold 72px 'Bebas Neue', sans-serif";
+    ctx.fillStyle = '#FF2D00';
+    ctx.textAlign = 'center';
+    ctx.fillText('BAILED!', W/2, H/2 - 30);
+    ctx.font = "24px 'Bebas Neue', sans-serif";
+    ctx.fillStyle = '#FFE000';
+    ctx.fillText(`SCORE: ${score}`, W/2, H/2 + 20);
+    ctx.font = "14px 'Space Mono', monospace";
+    ctx.fillStyle = 'rgba(245,245,240,0.5)';
+    ctx.fillText('SPACE / TAP to retry', W/2, H/2 + 60);
+    ctx.textAlign = 'left';
+  }
+
+  // Controls
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); running ? jump() : init(); }
+  });
+  canvas.addEventListener('click', () => running ? jump() : init());
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); running ? jump() : init(); }, { passive: false });
+
+  init();
+})();
+
+// ─── TRICK MASTER GAME ───
+const trickNames = ['KICKFLIP','HEELFLIP','VARIAL','360 FLIP','HARDFLIP','INWARD HEEL','OLLIE','NOLLIE','SWITCH OLLIE','CASPER'];
+const trickKeys = ['←','→','↑','↓','A','B'];
+let trickSeq = [], playerSeq = [], trickScoreVal = 0, trickStreakVal = 0, trickActive = false, trickTimer2;
+
+function startTrickGame() {
+  trickScoreVal = 0; trickStreakVal = 0;
+  document.getElementById('trickScore').textContent = '0';
+  document.getElementById('trickStreak').textContent = '0';
+  nextTrick();
+}
+
+function nextTrick() {
+  trickActive = true;
+  playerSeq = [];
+  const len = Math.min(2 + Math.floor(trickScoreVal / 3), 6);
+  trickSeq = Array.from({length: len}, () => trickKeys[Math.floor(Math.random() * trickKeys.length)]);
+  const name = trickNames[Math.floor(Math.random() * trickNames.length)];
+  document.getElementById('trickCombo').textContent = name;
+  document.getElementById('trickInstruction').textContent = 'hit the sequence:';
+  renderTrickKeys();
+  clearTimeout(trickTimer2);
+  trickTimer2 = setTimeout(() => { if (trickActive) failTrick(); }, 4000 + len * 500);
+}
+
+function renderTrickKeys(progress = 0) {
+  const el = document.getElementById('trickKeys');
+  el.innerHTML = trickSeq.map((k, i) =>
+    `<span style="display:inline-block;padding:12px 18px;background:${i < progress ? 'var(--yellow)' : '#1a1a1a'};color:${i < progress ? 'var(--black)' : 'var(--white)'};font-family:'Bebas Neue',sans-serif;font-size:1.4rem;border:1px solid ${i < progress ? 'var(--yellow)' : '#333'};transition:all 0.1s;">${k}</span>`
+  ).join('<span style="padding:0 6px;opacity:0.3;font-size:1.2rem;">+</span>');
+}
+
+function flashResult(text, color) {
+  const el = document.getElementById('trickResult');
+  el.textContent = text; el.style.color = color; el.style.opacity = '1';
+  setTimeout(() => el.style.opacity = '0', 800);
+}
+
+function failTrick() {
+  if (!trickActive) return;
+  trickActive = false;
+  clearTimeout(trickTimer2);
+  trickStreakVal = 0;
+  document.getElementById('trickStreak').textContent = '0';
+  flashResult('BAILED! 💀', '#FF2D00');
+  setTimeout(nextTrick, 1200);
+}
+
+function pressTrickKey(k) {
+  if (!trickActive) return;
+  playerSeq.push(k);
+  renderTrickKeys(playerSeq.length);
+  if (playerSeq[playerSeq.length-1] !== trickSeq[playerSeq.length-1]) {
+    failTrick(); return;
+  }
+  if (playerSeq.length === trickSeq.length) {
+    trickActive = false;
+    clearTimeout(trickTimer2);
+    trickScoreVal++;
+    trickStreakVal++;
+    document.getElementById('trickScore').textContent = trickScoreVal;
+    document.getElementById('trickStreak').textContent = trickStreakVal;
+    flashResult(trickStreakVal >= 5 ? 'ON FIRE!! 🔥' : 'NAILED IT! ✅', '#FFE000');
+    setTimeout(nextTrick, 900);
+  }
+}
+
+// On-screen D-pad buttons for Trick Master
+const btnStyle = `padding:14px 20px;background:#1a1a1a;color:var(--white);font-family:'Bebas Neue',sans-serif;font-size:1.3rem;border:1px solid #333;cursor:pointer;user-select:none;-webkit-user-select:none;transition:background 0.1s;min-width:52px;`;
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('trickBtns');
+  if (!container) return;
+  [['←','ArrowLeft'],['→','ArrowRight'],['↑','ArrowUp'],['↓','ArrowDown'],['A','A'],['B','B']].forEach(([label]) => {
+    const btn = document.createElement('button');
+    btn.textContent = label;
+    btn.style.cssText = btnStyle;
+    btn.addEventListener('mousedown', e => { e.preventDefault(); pressTrickKey(label); btn.style.background='#333'; });
+    btn.addEventListener('mouseup', () => btn.style.background='#1a1a1a');
+    btn.addEventListener('touchstart', e => { e.preventDefault(); pressTrickKey(label); btn.style.background='#333'; }, {passive:false});
+    btn.addEventListener('touchend', () => btn.style.background='#1a1a1a');
+    container.appendChild(btn);
+  });
+});
+
+// Keyboard support for trick master only when tricks tab is active
+document.addEventListener('keydown', e => {
+  if (document.getElementById('game-tricks').style.display === 'none') return;
+  if (!trickActive) return;
+  const map = { ArrowLeft:'←', ArrowRight:'→', ArrowUp:'↑', ArrowDown:'↓', KeyA:'A', KeyB:'B' };
+  const k = map[e.code];
+  if (!k) return;
+  e.preventDefault();
+  pressTrickKey(k);
+});
+</script>
+
+
+<section class="crew-section" id="crew">
+  <div class="crew-label">The Team</div>
+  <h2 class="crew-heading">The Bolted Crew</h2>
+  <div class="crew-grid" style="grid-template-columns:repeat(3,1fr);max-width:700px;">
+    <div class="crew-card visible">
+      <div class="crew-avatar">R</div>
+      <div class="crew-name">Ray</div>
+      <div class="crew-role">Founder</div>
+      <p style="font-size:0.7rem;color:rgba(245,245,240,0.4);margin-top:12px;line-height:1.7;">i started this whole thing. i do the builds and make sure everything is on point fr</p>
+    </div>
+    <div class="crew-card visible" style="transition-delay:0.1s;">
+      <div class="crew-avatar">H</div>
+      <div class="crew-name">Heeran</div>
+      <div class="crew-role">Co-Founder</div>
+      <p style="font-size:0.7rem;color:rgba(245,245,240,0.4);margin-top:12px;line-height:1.7;">heeran helps run the whole thing with me. solid builder no cap</p>
+    </div>
+    <div class="crew-card visible" style="transition-delay:0.2s;">
+      <div class="crew-avatar">S</div>
+      <div class="crew-name">Suddays</div>
+      <div class="crew-role">Builder</div>
+      <p style="font-size:0.7rem;color:rgba(245,245,240,0.4);margin-top:12px;line-height:1.7;">suddays is on the team doing the builds with us. we wouldnt be the same without him</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-bg-text">BOLTED</div>
+  <h2 class="cta-heading">Ready To<br>Ride?</h2>
+  <p class="cta-sub">Bring your parts. We'll build your dream setup.</p>
+  <a href="#" class="btn-dark" onclick="document.getElementById('bookingModal').style.display='flex';return false;">Book a Build →</a>
+</section>
+
+<!-- BOOKING MODAL -->
+<div id="bookingModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;align-items:center;justify-content:center;">
+  <div style="background:var(--black);border:1px solid #333;padding:56px 48px;max-width:480px;width:90%;position:relative;">
+    <button onclick="document.getElementById('bookingModal').style.display='none'" style="position:absolute;top:20px;right:24px;background:none;border:none;color:var(--white);font-size:1.5rem;cursor:pointer;opacity:0.5;">✕</button>
+    <div style="font-size:0.6rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--yellow);margin-bottom:16px;">Book a Build</div>
+    <h3 style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;margin-bottom:32px;">Let's Build Your Board</h3>
+    <div id="bookingForm">
+      <input id="bName" type="text" placeholder="Your name" style="width:100%;background:#1a1a1a;border:none;border-bottom:1px solid #333;padding:14px 0;color:var(--white);font-family:'Space Mono',monospace;font-size:0.8rem;margin-bottom:20px;outline:none;">
+      <input id="bContact" type="text" placeholder="Your phone / instagram" style="width:100%;background:#1a1a1a;border:none;border-bottom:1px solid #333;padding:14px 0;color:var(--white);font-family:'Space Mono',monospace;font-size:0.8rem;margin-bottom:20px;outline:none;">
+      <textarea id="bNotes" placeholder="What parts are you bringing?" rows="3" style="width:100%;background:#1a1a1a;border:none;border-bottom:1px solid #333;padding:14px 0;color:var(--white);font-family:'Space Mono',monospace;font-size:0.8rem;margin-bottom:32px;outline:none;resize:none;"></textarea>
+      <button onclick="submitBooking()" id="submitBtn" style="width:100%;padding:18px;background:var(--yellow);color:var(--black);font-family:'Space Mono',monospace;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;border:none;cursor:pointer;">Send It →</button>
+    </div>
+    <div id="bookingDone" style="display:none;text-align:center;padding:20px 0;">
+      <div style="font-size:2rem;margin-bottom:16px;">🛹</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;margin-bottom:12px;">We got you!</div>
+      <div style="font-size:0.75rem;color:rgba(245,245,240,0.5);line-height:1.8;">we'll hit you up soon to sort out the build. see you soon 🤙</div>
+    </div>
+  </div>
+</div>
+
+<script>
+async function submitBooking() {
+  const name = document.getElementById('bName').value.trim();
+  const contact = document.getElementById('bContact').value.trim();
+  const notes = document.getElementById('bNotes').value.trim();
+  if (!name || !contact) { alert('put ur name and contact bru 🛹'); return; }
+
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  const emails = ['bruhboy1144@gmail.com', 'heeran392@gmail.com'];
+  const body = `New Bolted booking!\n\nName: ${name}\nContact: ${contact}\nParts: ${notes || 'not specified'}`;
+
+  try {
+    // Send to both emails via formsubmit.co
+    await fetch('https://formsubmit.co/ajax/bruhboy1144@gmail.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ name, contact, parts: notes || 'not specified', _cc: 'heeran392@gmail.com', _subject: '🛹 New Bolted Build Booking!' })
+    });
+    document.getElementById('bookingForm').style.display = 'none';
+    document.getElementById('bookingDone').style.display = 'block';
+  } catch(e) {
+    btn.textContent = 'Send It →';
+    btn.disabled = false;
+    alert('something went wrong bru, try again');
+  }
+}
+</script>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Bolted</div>
+  <div class="footer-copy">© 2025 Bolted. All rights reserved.</div>
+  <div class="footer-right">Custom Skateboard Builds<br>by the crew</div>
+</footer>
+
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+
+function animateRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '6px';
+    cursor.style.height = '6px';
+    ring.style.width = '56px';
+    ring.style.height = '56px';
+    ring.style.opacity = '0.8';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '12px';
+    cursor.style.height = '12px';
+    ring.style.width = '36px';
+    ring.style.height = '36px';
+    ring.style.opacity = '0.5';
+  });
+});
+
+// Scroll reveal
+const revealEls = document.querySelectorAll('.step-card, .price-card, .crew-card');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.15 });
+revealEls.forEach(el => observer.observe(el));
+
+// Parallax text
+const parallaxText = document.getElementById('parallaxText');
+const parallaxStrip = parallaxText?.closest('.parallax-strip');
+if (parallaxText && parallaxStrip) {
+  window.addEventListener('scroll', () => {
+    const rect = parallaxStrip.getBoundingClientRect();
+    const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+    const offset = (progress - 0.5) * -200;
+    parallaxText.style.transform = `translateX(${offset}px)`;
+  });
+}
+
+// Smooth scroll nav
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+</script>
+</body>
+</html>

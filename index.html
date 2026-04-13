@@ -1,0 +1,2783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bolted — Custom Skateboard Builds</title>
+<meta name="description" content="we build your skateboard for $40. bring the parts, we bolt it up. custom builds by ray, heeran & suddays 🛹">
+<meta property="og:title" content="Bolted — Custom Skateboard Builds">
+<meta property="og:description" content="we build your skateboard for $40. bring the parts, we bolt it up 🛹">
+<meta property="og:type" content="website">
+<meta property="og:image" content="preview.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Bolted — Custom Skateboard Builds">
+<meta name="twitter:description" content="we build your skateboard for $40. bring the parts, we bolt it up 🛹">
+<meta name="twitter:image" content="preview.svg">
+<meta property="og:image" content="https://og-image.vercel.app/Bolted%20%F0%9F%9B%B9.png?theme=dark&md=1&fontSize=200px&images=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fvercel-triangle-white.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Bolted — Custom Skateboard Builds">
+<meta name="twitter:description" content="we build your skateboard for $40. bring the parts, we bolt it up 🛹">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23080808'/><text y='82' x='50' font-family='Georgia,serif' font-size='85' font-weight='700' fill='%23FFE000' text-anchor='middle'>B</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #080808;
+    --white: #f5f5f0;
+    --yellow: #FFE000;
+    --red: #FF2D00;
+    --gray: #1a1a1a;
+    --mid: #333;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Space Mono', monospace;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: var(--yellow);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--yellow);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease-out, width 0.3s, height 0.3s, opacity 0.3s;
+    opacity: 0.5;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 48px;
+    background: rgba(8,8,8,0.45);
+    backdrop-filter: blur(24px) saturate(1.6);
+    -webkit-backdrop-filter: blur(24px) saturate(1.6);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 2px 24px rgba(0,0,0,0.3);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.15em;
+    color: var(--white);
+  }
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; }
+
+  /* HERO */
+  .hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-noise {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .hero-lines {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .hero-lines span {
+    position: absolute;
+    display: block;
+    background: var(--yellow);
+    opacity: 0.04;
+  }
+  .hero-lines span:nth-child(1) { width: 1px; height: 100%; left: 33%; animation: linePulse 4s ease-in-out infinite; }
+  .hero-lines span:nth-child(2) { width: 1px; height: 100%; left: 66%; animation: linePulse 4s ease-in-out infinite 1s; }
+  .hero-lines span:nth-child(3) { width: 100%; height: 1px; top: 50%; animation: linePulse 4s ease-in-out infinite 2s; }
+
+  @keyframes linePulse {
+    0%, 100% { opacity: 0.03; }
+    50% { opacity: 0.08; }
+  }
+
+  .hero-tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s ease forwards 0.3s;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(6rem, 18vw, 18rem);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: fadeUp 0.9s ease forwards 0.5s;
+  }
+
+  .hero-title .outline {
+    -webkit-text-stroke: 2px var(--white);
+    color: transparent;
+  }
+
+  .hero-subtitle {
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    color: var(--white);
+    opacity: 0;
+    max-width: 360px;
+    line-height: 1.8;
+    margin-top: 32px;
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 0.9s ease forwards 0.8s;
+    transform: translateY(20px);
+  }
+
+  .hero-cta {
+    margin-top: 48px;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards 1s;
+    transform: translateY(20px);
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 16px 40px;
+    background: var(--yellow);
+    color: var(--black);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 0 var(--red);
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    right: 48px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    animation: fadeUp 1s ease forwards 1.5s;
+    opacity: 0;
+  }
+  .hero-scroll::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--white);
+    animation: lineGrow 1.5s ease forwards 1.8s;
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+  @keyframes lineGrow {
+    to { transform: scaleX(1); opacity: 0.4; }
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* BIG BOARD NUMBER — decorative */
+  .hero-number {
+    position: absolute;
+    right: -20px;
+    bottom: -60px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30vw;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.04);
+    pointer-events: none;
+    z-index: 1;
+    user-select: none;
+  }
+
+  /* ─── SCROLL SECTIONS ─── */
+
+  /* MARQUEE */
+  .marquee-wrap {
+    background: var(--yellow);
+    padding: 20px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .marquee-track {
+    display: inline-flex;
+    animation: marquee 14s linear infinite;
+  }
+  .marquee-track span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.2em;
+    color: var(--black);
+    padding: 0 48px;
+  }
+  .marquee-track span.dot {
+    color: var(--red);
+    padding: 0;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ABOUT / STICKY PIN SECTION */
+  .about-section {
+    min-height: 200vh;
+    position: relative;
+  }
+  .about-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+  }
+  .about-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 64px;
+    position: relative;
+  }
+  .about-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 32px;
+  }
+  .about-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 6vw, 6rem);
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+  .about-heading .accent { color: var(--yellow); }
+  .about-body {
+    margin-top: 32px;
+    font-size: 0.8rem;
+    line-height: 2;
+    color: rgba(245,245,240,0.6);
+    max-width: 400px;
+  }
+  .about-right {
+    background: var(--gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Animated board illustration */
+  .board-illustration {
+    position: relative;
+    width: 260px;
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #boardCanvas {
+    cursor: pointer;
+    filter: drop-shadow(0 30px 60px rgba(0,0,0,0.8));
+  }
+  .board-trick-label {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+    color: var(--yellow);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+  .about-glow {
+    position: absolute;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(255,224,0,0.08), transparent 70%);
+    border-radius: 50%;
+    animation: glowPulse 3s ease-in-out infinite;
+  }
+  @keyframes glowPulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.2); opacity: 1; }
+  }
+
+  /* HOW IT WORKS — scroll reveal cards */
+  .steps-section {
+    padding: 140px 48px;
+    position: relative;
+  }
+  .steps-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .steps-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 6rem);
+    text-align: center;
+    letter-spacing: 0.04em;
+    margin-bottom: 100px;
+  }
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .step-card {
+    background: rgba(26,26,26,0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.05);
+    padding: 56px 40px;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 0.7s ease, transform 0.7s ease, background 0.3s, box-shadow 0.3s;
+    border-radius: 4px;
+  }
+  .step-card:hover {
+    background: rgba(34,34,34,0.85);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .step-card.visible { opacity: 1; transform: translateY(0); }
+  .step-card:nth-child(2) { transition-delay: 0.1s; }
+  .step-card:nth-child(3) { transition-delay: 0.2s; }
+  .step-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,224,0,0.3);
+    line-height: 1;
+    margin-bottom: 24px;
+  }
+  .step-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+  }
+  .step-body {
+    font-size: 0.75rem;
+    line-height: 1.9;
+    color: rgba(245,245,240,0.5);
+  }
+  .step-bar {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px;
+    width: 0;
+    background: var(--yellow);
+    transition: width 0.6s ease 0.4s;
+  }
+  .step-card.visible .step-bar { width: 100%; }
+
+  /* PRICING SECTION */
+  .pricing-section {
+    padding: 140px 48px;
+    background: var(--white);
+    color: var(--black);
+  }
+  .pricing-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .pricing-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 6rem);
+    text-align: center;
+    letter-spacing: 0.04em;
+    margin-bottom: 80px;
+    color: var(--black);
+  }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .price-card {
+    padding: 48px 36px;
+    background: #f0f0eb;
+    position: relative;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .price-card.visible { opacity: 1; transform: translateY(0); }
+  .price-card:nth-child(2) { transition-delay: 0.1s; background: var(--black); color: var(--white); }
+  .price-card:nth-child(3) { transition-delay: 0.2s; }
+  .price-card.featured::before {
+    content: 'POPULAR';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--yellow);
+    color: var(--black);
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    padding: 4px 16px;
+    font-weight: 700;
+  }
+  .price-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .price-desc {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: 32px;
+  }
+  .price-features {
+    list-style: none;
+    font-size: 0.75rem;
+    line-height: 2.2;
+  }
+  .price-features li::before {
+    content: '→ ';
+    color: var(--yellow);
+  }
+  .price-card:nth-child(2) .price-features li::before { color: var(--yellow); }
+
+  /* CREW */
+  .crew-section {
+    padding: 140px 48px;
+    text-align: center;
+  }
+  .crew-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 16px;
+  }
+  .crew-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 6rem);
+    letter-spacing: 0.04em;
+    margin-bottom: 80px;
+  }
+  .crew-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .crew-card {
+    background: rgba(26,26,26,0.7);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 48px 24px;
+    opacity: 0;
+    transform: translateY(40px) scale(0.96);
+    transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s;
+  }
+  .crew-card:hover {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .crew-card.visible { opacity: 1; transform: translateY(0) scale(1); }
+  .crew-card:nth-child(2) { transition-delay: 0.1s; }
+  .crew-card:nth-child(3) { transition-delay: 0.2s; }
+  .crew-card:nth-child(4) { transition-delay: 0.3s; }
+  .crew-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: var(--mid);
+    margin: 0 auto 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: var(--yellow);
+    position: relative;
+    overflow: hidden;
+  }
+  .crew-avatar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid var(--yellow);
+    opacity: 0.3;
+  }
+  .crew-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  .crew-role {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(245,245,240,0.4);
+  }
+
+  /* CTA SECTION */
+  .cta-section {
+    padding: 160px 48px;
+    background: var(--yellow);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28vw;
+    color: transparent;
+    -webkit-text-stroke: 2px rgba(0,0,0,0.06);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .cta-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 9vw, 10rem);
+    color: var(--black);
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 40px;
+  }
+  .cta-sub {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: rgba(0,0,0,0.5);
+    margin-bottom: 48px;
+    position: relative;
+    z-index: 1;
+  }
+  .btn-dark {
+    display: inline-block;
+    padding: 18px 48px;
+    background: var(--black);
+    color: var(--yellow);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-dark:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 0 var(--red);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--black);
+    border-top: 1px solid #1a1a1a;
+    padding: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.15em;
+  }
+  .footer-copy {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: rgba(245,245,240,0.3);
+  }
+  .footer-right {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: rgba(245,245,240,0.3);
+    text-align: right;
+  }
+
+  /* PARALLAX BG STRIP */
+  .parallax-strip {
+    height: 300px;
+    background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0f0f0f 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .parallax-inner {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 12vw, 12rem);
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,224,0,0.15);
+    will-change: transform;
+    white-space: nowrap;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    nav { padding: 24px; }
+    .hero { padding: 0 24px; }
+    .about-sticky { grid-template-columns: 1fr; }
+    .about-right { display: none; }
+    .steps-grid, .pricing-grid, .crew-grid { grid-template-columns: 1fr; }
+    .steps-section, .pricing-section, .crew-section, .cta-section { padding: 80px 24px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+    .footer-right { text-align: center; }
+  }
+
+  /* ── LIQUID GLASS SYSTEM ── */
+  .glass {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(20px) saturate(1.6) brightness(1.05);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6) brightness(1.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+    border-radius: 12px;
+  }
+  .glass-yellow {
+    background: rgba(255,224,0,0.12);
+    backdrop-filter: blur(20px) saturate(1.8);
+    -webkit-backdrop-filter: blur(20px) saturate(1.8);
+    border: 1px solid rgba(255,224,0,0.25);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+    border-radius: 12px;
+  }
+
+  /* ── MOUSE TRAIL ── */
+  .trail-dot {
+    position: fixed;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9990;
+    transform: translate(-50%,-50%);
+    transition: opacity 0.4s;
+    mix-blend-mode: screen;
+  }
+
+  /* ── SETTINGS PANEL ── */
+  #settingsBtn {
+    position: fixed; bottom: 96px; right: 32px; z-index: 8000;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(245,245,240,0.5);
+    font-size: 1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  }
+  #settingsBtn:hover { border-color:rgba(255,224,0,0.4); color:#FFE000; transform:rotate(60deg); }
+
+  #settingsPanel {
+    position: fixed; bottom: 144px; right: 28px; z-index: 8000;
+    width: 260px;
+    background: rgba(10,10,10,0.82);
+    backdrop-filter: blur(28px) saturate(1.5);
+    -webkit-backdrop-filter: blur(28px) saturate(1.5);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+    padding: 20px;
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+  }
+  #settingsPanel h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem; letter-spacing: 0.2em;
+    color: rgba(245,245,240,0.8); margin-bottom: 4px;
+  }
+  .setting-row {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.65rem; letter-spacing: 0.1em;
+    color: rgba(245,245,240,0.5);
+  }
+  .toggle {
+    width: 36px; height: 20px; border-radius: 10px;
+    background: #222; border: 1px solid #333; cursor: pointer;
+    position: relative; transition: background 0.2s;
+  }
+  .toggle.on { background: #FFE000; border-color: #FFE000; }
+  .toggle::after {
+    content:''; position:absolute; top:2px; left:2px;
+    width:14px; height:14px; border-radius:50%;
+    background:#555; transition:all 0.2s;
+  }
+  .toggle.on::after { background:#080808; transform:translateX(16px); }
+  .setting-label { text-transform: uppercase; }
+
+  /* ── ADMIN PANEL ── */
+  #adminOverlay {
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,0.92);
+    backdrop-filter:blur(8px);
+    z-index:9500;
+    align-items:center; justify-content:center;
+  }
+  #adminBox {
+    background:rgba(12,12,12,0.95);
+    border:1px solid rgba(255,224,0,0.2);
+    border-radius:16px;
+    width:min(560px,94vw);
+    max-height:88vh;
+    overflow-y:auto;
+    box-shadow:0 24px 80px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.04);
+    padding:40px;
+  }
+  #adminBox::-webkit-scrollbar{width:4px;}
+  #adminBox::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
+  .admin-header {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:32px;
+  }
+  .admin-title {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:2rem; letter-spacing:0.1em; color:#FFE000;
+  }
+  .admin-close {
+    background:none;border:none;color:rgba(245,245,240,0.4);
+    font-size:1.4rem;cursor:pointer;
+  }
+  .admin-section {
+    margin-bottom:28px;
+    background:rgba(255,255,255,0.02);
+    border:1px solid rgba(255,255,255,0.05);
+    border-radius:10px;
+    padding:20px;
+  }
+  .admin-section h5 {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:0.85rem;letter-spacing:0.25em;
+    color:rgba(245,245,240,0.4);margin-bottom:16px;
+    text-transform:uppercase;
+  }
+  .admin-stat {
+    display:flex;justify-content:space-between;
+    font-size:0.7rem;color:rgba(245,245,240,0.5);
+    padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);
+  }
+  .admin-stat span:last-child { color:#FFE000; font-weight:700; }
+  .admin-login {
+    display:flex;flex-direction:column;gap:12px;
+  }
+  .admin-input {
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:8px; padding:12px 16px;
+    color:#f5f5f0; font-family:'Space Mono',monospace;
+    font-size:0.75rem; outline:none; width:100%;
+    transition:border-color 0.2s;
+  }
+  .admin-input:focus{border-color:rgba(255,224,0,0.5);}
+  .admin-btn {
+    background:#FFE000;color:#080808;border:none;
+    padding:12px 24px;border-radius:8px;
+    font-family:'Space Mono',monospace;font-size:0.7rem;
+    font-weight:700;letter-spacing:0.15em;text-transform:uppercase;
+    cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;
+    box-shadow:0 4px 16px rgba(255,224,0,0.2);
+  }
+  .admin-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,224,0,0.3);}
+  .admin-badge {
+    display:inline-block;padding:2px 8px;border-radius:4px;
+    font-size:0.55rem;letter-spacing:0.2em;font-weight:700;
+    text-transform:uppercase;
+  }
+  .badge-ray{background:rgba(255,224,0,0.15);color:#FFE000;border:1px solid rgba(255,224,0,0.3);}
+  .badge-heeran{background:rgba(255,45,0,0.15);color:#FF6644;border:1px solid rgba(255,45,0,0.3);}
+
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <div class="nav-logo">Bolted</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#how">Process</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#deals">Deals</a></li>
+    <li><a href="#games">Games</a></li>
+    <li><a href="#crew">Crew</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-lines">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="hero-noise"></div>
+  <div class="hero-tag">Custom Skateboard Builds — Est. 2025</div>
+  <h1 class="hero-title">
+    BOL<br><span class="outline">TED</span>
+  </h1>
+  <p class="hero-subtitle">You bring the parts. We build your perfect board. Local. Handbuilt. Dialed.</p>
+  <div class="hero-cta">
+    <a href="#how" class="btn">Get Your Board Built →</a>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+  <div class="hero-number">B</div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>CUSTOM BUILDS</span><span class="dot">✦</span>
+    <span>DIALED SETUPS</span><span class="dot">✦</span>
+    <span>BRING YOUR PARTS</span><span class="dot">✦</span>
+    <span>WE BOLT IT UP</span><span class="dot">✦</span>
+    <span>BOLTED</span><span class="dot">✦</span>
+    <span>CUSTOM BUILDS</span><span class="dot">✦</span>
+    <span>DIALED SETUPS</span><span class="dot">✦</span>
+    <span>BRING YOUR PARTS</span><span class="dot">✦</span>
+    <span>WE BOLT IT UP</span><span class="dot">✦</span>
+    <span>BOLTED</span><span class="dot">✦</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="about-sticky">
+    <div class="about-left">
+      <div class="about-label">Who We Are</div>
+      <h2 class="about-heading">Built By<br><span class="accent">Skaters,</span><br>For Skaters.</h2>
+      <p class="about-body">we're a small crew that knows how a board should feel. bring us your deck, trucks, wheels, and hardware — we put it all together properly, every time. no cap.</p>
+    </div>
+    <div class="about-right">
+      <div class="about-glow"></div>
+      <div class="board-illustration">
+        <canvas id="boardCanvas" width="260" height="320"></canvas>
+        <div class="board-trick-label" id="trickLabel"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARALLAX STRIP -->
+<div class="parallax-strip">
+  <div class="parallax-inner" id="parallaxText">PUSH — GRIND — BOLTED — BUILD —</div>
+</div>
+
+<!-- STEPS -->
+<section class="steps-section" id="how">
+  <div class="steps-label">The Process</div>
+  <h2 class="steps-heading">How It Works</h2>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-number">01</div>
+      <div class="step-title">Bring Your Parts</div>
+      <p class="step-body">Deck, trucks, wheels, bearings, hardware. You source everything — we handle the rest.</p>
+      <div class="step-bar"></div>
+    </div>
+    <div class="step-card">
+      <div class="step-number">02</div>
+      <div class="step-title">We Build It</div>
+      <p class="step-body">Grip tape pressed clean, trucks torqued right, bearings seated perfectly. No shortcuts.</p>
+      <div class="step-bar"></div>
+    </div>
+    <div class="step-card">
+      <div class="step-number">03</div>
+      <div class="step-title">Ride Out</div>
+      <p class="step-body">Pick up your freshly built board and hit the streets. Dialed and ready to skate.</p>
+      <div class="step-bar"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="pricing-label">Pricing</div>
+  <h2 class="pricing-heading">One Price.<br>No BS.</h2>
+  <div style="max-width:500px;margin:0 auto;text-align:center;">
+    <div class="price-card featured visible" style="padding:80px 48px;background:var(--black);color:var(--white);display:inline-block;width:100%;">
+      <div class="price-amount" style="font-size:7rem;">$40</div>
+      <div class="price-desc" style="font-size:0.85rem;margin-bottom:40px;">Full Board Assembly</div>
+      <ul class="price-features" style="text-align:left;font-size:0.8rem;">
+        <li>You bring all the parts</li>
+        <li>We put it all together</li>
+        <li>Grip tape, trucks, wheels & bearings</li>
+        <li>Ready to skate same day</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- GAMES -->
+<section id="games" style="padding:140px 48px;background:#0d0d0d;">
+  <div style="font-size:0.6rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--yellow);margin-bottom:16px;text-align:center;">Mini Games</div>
+  <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6vw,6rem);text-align:center;letter-spacing:0.04em;margin-bottom:60px;">Kill Time While<br>We Build</h2>
+
+  <!-- GAME TABS -->
+  <div style="display:flex;gap:2px;max-width:900px;margin:0 auto 40px;justify-content:center;">
+    <button onclick="switchGame('skater')" id="tab-skater" style="padding:14px 32px;background:var(--yellow);color:var(--black);font-family:'Space Mono',monospace;font-size:0.7rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;border:none;cursor:pointer;">🛹 Skate Run</button>
+    <button onclick="switchGame('tricks')" id="tab-tricks" style="padding:14px 32px;background:#1a1a1a;color:var(--white);font-family:'Space Mono',monospace;font-size:0.7rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;border:none;cursor:pointer;">🔥 Trick Master</button>
+  </div>
+
+  <!-- SKATE RUN GAME -->
+  <div id="game-skater" style="max-width:900px;margin:0 auto;">
+    <canvas id="skateCanvas" width="900" height="320" style="width:100%;background:#111;display:block;border:1px solid #222;"></canvas>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding:0 4px;">
+      <div style="font-size:0.7rem;color:rgba(245,245,240,0.4);letter-spacing:0.1em;">SPACE / TAP to jump &nbsp;|&nbsp; DOUBLE JUMP for grind</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--yellow);">SCORE: <span id="skateScore">0</span></div>
+    </div>
+  </div>
+
+  <!-- TRICK MASTER GAME -->
+  <div id="game-tricks" style="max-width:900px;margin:0 auto;display:none;">
+    <div style="background:#111;border:1px solid #222;padding:48px;text-align:center;min-height:320px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;">
+      <div id="trickCombo" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,4rem);color:var(--yellow);margin-bottom:24px;min-height:60px;"></div>
+      <div id="trickInstruction" style="font-size:0.8rem;color:rgba(245,245,240,0.5);margin-bottom:40px;letter-spacing:0.1em;">press start to get a trick combo</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;" id="trickKeys"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:20px;" id="trickBtns"></div>
+      <div style="position:absolute;top:24px;right:32px;font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--white);">SCORE: <span id="trickScore">0</span></div>
+      <div style="position:absolute;top:24px;left:32px;font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:rgba(245,245,240,0.3);">STREAK: <span id="trickStreak">0</span>🔥</div>
+      <div id="trickResult" style="position:absolute;bottom:24px;font-family:'Bebas Neue',sans-serif;font-size:2rem;opacity:0;transition:opacity 0.3s;"></div>
+    </div>
+    <div style="display:flex;justify-content:center;margin-top:20px;">
+      <button onclick="startTrickGame()" style="padding:16px 48px;background:var(--yellow);color:var(--black);font-family:'Space Mono',monospace;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;border:none;cursor:pointer;">Start →</button>
+    </div>
+  </div>
+</section>
+
+<script>
+// ─── GAME TAB SWITCHER ───
+function switchGame(id) {
+  document.getElementById('game-skater').style.display = id === 'skater' ? 'block' : 'none';
+  document.getElementById('game-tricks').style.display = id === 'tricks' ? 'block' : 'none';
+  document.getElementById('tab-skater').style.background = id === 'skater' ? 'var(--yellow)' : '#1a1a1a';
+  document.getElementById('tab-skater').style.color = id === 'skater' ? 'var(--black)' : 'var(--white)';
+  document.getElementById('tab-tricks').style.background = id === 'tricks' ? 'var(--yellow)' : '#1a1a1a';
+  document.getElementById('tab-tricks').style.color = id === 'tricks' ? 'var(--black)' : 'var(--white)';
+}
+
+// ─── SKATE RUN GAME ───
+(function() {
+  const canvas = document.getElementById('skateCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const GROUND = H - 60;
+
+  let skater, obstacles, particles, score, speed, frame, raf, running, jumpCount;
+
+  const tricks = ['KICKFLIP!','HEELFLIP!','360 FLIP!','OLLIE!','NOLLIE!','FAKIE!','GRIND!','MANUAL!'];
+
+  function init() {
+    skater = { x: 120, y: GROUND, w: 44, h: 52, vy: 0, jumping: false, trick: '', trickTimer: 0, frame: 0 };
+    obstacles = [];
+    particles = [];
+    score = 0;
+    speed = 5;
+    frame = 0;
+    jumpCount = 0;
+    running = true;
+    document.getElementById('skateScore').textContent = '0';
+    loop();
+  }
+
+  function jump() {
+    if (jumpCount < 2) {
+      skater.vy = jumpCount === 0 ? -11 : -9;
+      skater.jumping = true;
+      jumpCount++;
+      if (jumpCount === 2) {
+        skater.trick = tricks[Math.floor(Math.random() * tricks.length)];
+        skater.trickTimer = 50;
+        spawnParticles(skater.x + skater.w/2, skater.y + skater.h/2, '#FFE000');
+      }
+    }
+  }
+
+  function spawnParticles(x, y, color) {
+    for (let i = 0; i < 10; i++) {
+      particles.push({ x, y, vx: (Math.random()-0.5)*6, vy: (Math.random()-0.5)*6, alpha: 1, color });
+    }
+  }
+
+  function loop() {
+    if (!running) return;
+    ctx.clearRect(0, 0, W, H);
+
+    // Background city silhouette
+    ctx.fillStyle = '#0d0d0d';
+    ctx.fillRect(0, 0, W, H);
+
+    // Stars
+    if (frame % 3 === 0) {
+      ctx.fillStyle = 'rgba(255,255,255,0.3)';
+      for (let i = 0; i < 3; i++) {
+        ctx.fillRect(Math.random() * W, Math.random() * (GROUND - 40), 2, 2);
+      }
+    }
+
+    // Ground
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(0, GROUND + 52, W, H - GROUND - 52);
+
+    // Ground line
+    ctx.strokeStyle = '#FFE000';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(0, GROUND + 52);
+    ctx.lineTo(W, GROUND + 52);
+    ctx.stroke();
+
+    // Dashed road markings
+    ctx.strokeStyle = '#333';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([30, 20]);
+    ctx.beginPath();
+    ctx.moveTo(frame % 50 - 50, GROUND + 70);
+    ctx.lineTo(W, GROUND + 70);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Skater physics
+    skater.vy += 0.8;
+    skater.y += skater.vy;
+    if (skater.y >= GROUND) {
+      skater.y = GROUND;
+      skater.vy = 0;
+      skater.jumping = false;
+      jumpCount = 0;
+    }
+
+    // Animate skater legs
+    skater.frame = Math.floor(frame / 8) % 4;
+
+    // Draw skater
+    const sx = skater.x, sy = skater.y;
+    // Board
+    ctx.fillStyle = skater.jumping ? '#FFE000' : '#cccccc';
+    ctx.fillRect(sx - 4, sy + 44, 52, 8);
+    ctx.fillStyle = '#333';
+    ctx.fillRect(sx, sy + 50, 10, 4); // truck
+    ctx.fillRect(sx + 32, sy + 50, 10, 4);
+    // Wheels
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(sx + 5, sy + 56, 5, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(sx + 39, sy + 56, 5, 0, Math.PI*2); ctx.fill();
+    // Body
+    ctx.fillStyle = '#FFE000';
+    ctx.fillRect(sx + 8, sy + 16, 20, 28); // torso
+    // Head
+    ctx.fillStyle = '#f5c89a';
+    ctx.beginPath(); ctx.arc(sx + 18, sy + 10, 10, 0, Math.PI*2); ctx.fill();
+    // Arms
+    const armSway = Math.sin(frame * 0.15) * 4;
+    ctx.strokeStyle = '#FFE000'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(sx + 8, sy + 22); ctx.lineTo(sx - 4, sy + 32 + armSway); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(sx + 28, sy + 22); ctx.lineTo(sx + 40, sy + 32 - armSway); ctx.stroke();
+    // Legs
+    const legSway = skater.jumping ? 8 : Math.sin(frame * 0.3) * 5;
+    ctx.beginPath(); ctx.moveTo(sx + 12, sy + 44); ctx.lineTo(sx + 6, sy + 50 + legSway); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(sx + 22, sy + 44); ctx.lineTo(sx + 28, sy + 50 - legSway); ctx.stroke();
+
+    // Trick text
+    if (skater.trickTimer > 0) {
+      ctx.font = `bold ${Math.min(28, skater.trickTimer)}px 'Bebas Neue', sans-serif`;
+      ctx.fillStyle = `rgba(255,224,0,${skater.trickTimer/50})`;
+      ctx.textAlign = 'center';
+      ctx.fillText(skater.trick, sx + 18, sy - 10);
+      ctx.textAlign = 'left';
+      skater.trickTimer--;
+    }
+
+    // Obstacles
+    frame++;
+    speed = 5 + Math.floor(score / 300) * 0.5;
+
+    if (frame % Math.max(55, 90 - Math.floor(score/200)) === 0) {
+      const types = ['cone','rail','gap'];
+      const t = types[Math.floor(Math.random() * types.length)];
+      obstacles.push({ x: W + 20, type: t,
+        w: t === 'rail' ? 80 : t === 'gap' ? 60 : 20,
+        h: t === 'cone' ? 30 : t === 'rail' ? 14 : 0 });
+    }
+
+    obstacles.forEach((ob, i) => {
+      ob.x -= speed;
+      const oy = GROUND + 52 - ob.h;
+
+      if (ob.type === 'cone') {
+        ctx.fillStyle = '#FF2D00';
+        ctx.beginPath();
+        ctx.moveTo(ob.x + 10, oy - 20);
+        ctx.lineTo(ob.x, oy);
+        ctx.lineTo(ob.x + 20, oy);
+        ctx.fill();
+        ctx.fillStyle = 'white';
+        ctx.fillRect(ob.x + 2, oy - 8, 16, 4);
+      } else if (ob.type === 'rail') {
+        ctx.fillStyle = '#888';
+        ctx.fillRect(ob.x, oy, ob.w, ob.h);
+        ctx.fillStyle = '#aaa';
+        ctx.fillRect(ob.x, oy, ob.w, 3);
+        ctx.fillRect(ob.x, oy, 4, ob.h);
+        ctx.fillRect(ob.x + ob.w - 4, oy, 4, ob.h);
+      } else if (ob.type === 'gap') {
+        ctx.fillStyle = '#080808';
+        ctx.fillRect(ob.x, GROUND + 52, ob.w, 30);
+        ctx.strokeStyle = '#FF2D00';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(ob.x, GROUND + 52, ob.w, 30);
+      }
+
+      // Collision
+      const hit = skater.x + skater.w - 8 > ob.x + 4 &&
+                  skater.x + 8 < ob.x + ob.w - 4 &&
+                  skater.y + skater.h > oy - 4 &&
+                  (ob.type !== 'gap' || skater.y + skater.h >= GROUND);
+      if (ob.type === 'gap') {
+        const inGap = skater.x + skater.w/2 > ob.x && skater.x + skater.w/2 < ob.x + ob.w;
+        if (inGap && skater.y >= GROUND) { gameOver(); return; }
+      } else if (hit) { gameOver(); return; }
+
+      if (ob.x + ob.w < 0) obstacles.splice(i, 1);
+    });
+
+    // Particles
+    particles.forEach((p, i) => {
+      p.x += p.vx; p.y += p.vy; p.alpha -= 0.04;
+      ctx.globalAlpha = Math.max(0, p.alpha);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(p.x, p.y, 4, 4);
+      if (p.alpha <= 0) particles.splice(i, 1);
+    });
+    ctx.globalAlpha = 1;
+
+    // Score
+    score++;
+    document.getElementById('skateScore').textContent = score;
+
+    // HUD speed indicator
+    ctx.font = "12px 'Space Mono', monospace";
+    ctx.fillStyle = 'rgba(255,224,0,0.3)';
+    ctx.fillText(`SPEED x${(speed).toFixed(1)}`, 20, 30);
+
+    raf = requestAnimationFrame(loop);
+  }
+
+  function gameOver() {
+    running = false;
+    cancelAnimationFrame(raf);
+    ctx.fillStyle = 'rgba(8,8,8,0.85)';
+    ctx.fillRect(0, 0, W, H);
+    ctx.font = "bold 72px 'Bebas Neue', sans-serif";
+    ctx.fillStyle = '#FF2D00';
+    ctx.textAlign = 'center';
+    ctx.fillText('BAILED!', W/2, H/2 - 30);
+    ctx.font = "24px 'Bebas Neue', sans-serif";
+    ctx.fillStyle = '#FFE000';
+    ctx.fillText(`SCORE: ${score}`, W/2, H/2 + 20);
+    ctx.font = "14px 'Space Mono', monospace";
+    ctx.fillStyle = 'rgba(245,245,240,0.5)';
+    ctx.fillText('SPACE / TAP to retry', W/2, H/2 + 60);
+    ctx.textAlign = 'left';
+  }
+
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space') {
+    const tag = document.activeElement.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    e.preventDefault();
+    running ? jump() : init();
+  }
+});
+  canvas.addEventListener('click', () => running ? jump() : init());
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); running ? jump() : init(); }, { passive: false });
+
+  init();
+})();
+
+// ─── TRICK MASTER GAME ───
+const trickNames = ['KICKFLIP','HEELFLIP','VARIAL','360 FLIP','HARDFLIP','INWARD HEEL','OLLIE','NOLLIE','SWITCH OLLIE','CASPER'];
+const trickKeys = ['←','→','↑','↓','A','B'];
+let trickSeq = [], playerSeq = [], trickScoreVal = 0, trickStreakVal = 0, trickActive = false, trickTimer2;
+
+function startTrickGame() {
+  trickScoreVal = 0; trickStreakVal = 0;
+  document.getElementById('trickScore').textContent = '0';
+  document.getElementById('trickStreak').textContent = '0';
+  nextTrick();
+}
+
+function nextTrick() {
+  trickActive = true;
+  playerSeq = [];
+  const len = Math.min(2 + Math.floor(trickScoreVal / 3), 6);
+  trickSeq = Array.from({length: len}, () => trickKeys[Math.floor(Math.random() * trickKeys.length)]);
+  const name = trickNames[Math.floor(Math.random() * trickNames.length)];
+  document.getElementById('trickCombo').textContent = name;
+  document.getElementById('trickInstruction').textContent = 'hit the sequence:';
+  renderTrickKeys();
+  clearTimeout(trickTimer2);
+  trickTimer2 = setTimeout(() => { if (trickActive) failTrick(); }, 4000 + len * 500);
+}
+
+function renderTrickKeys(progress = 0) {
+  const el = document.getElementById('trickKeys');
+  el.innerHTML = trickSeq.map((k, i) =>
+    `<span style="display:inline-block;padding:12px 18px;background:${i < progress ? 'var(--yellow)' : '#1a1a1a'};color:${i < progress ? 'var(--black)' : 'var(--white)'};font-family:'Bebas Neue',sans-serif;font-size:1.4rem;border:1px solid ${i < progress ? 'var(--yellow)' : '#333'};transition:all 0.1s;">${k}</span>`
+  ).join('<span style="padding:0 6px;opacity:0.3;font-size:1.2rem;">+</span>');
+}
+
+function flashResult(text, color) {
+  const el = document.getElementById('trickResult');
+  el.textContent = text; el.style.color = color; el.style.opacity = '1';
+  setTimeout(() => el.style.opacity = '0', 800);
+}
+
+function failTrick() {
+  if (!trickActive) return;
+  trickActive = false;
+  clearTimeout(trickTimer2);
+  trickStreakVal = 0;
+  document.getElementById('trickStreak').textContent = '0';
+  flashResult('BAILED! 💀', '#FF2D00');
+  setTimeout(nextTrick, 1200);
+}
+
+function pressTrickKey(k) {
+  if (!trickActive) return;
+  playerSeq.push(k);
+  renderTrickKeys(playerSeq.length);
+  if (playerSeq[playerSeq.length-1] !== trickSeq[playerSeq.length-1]) {
+    failTrick(); return;
+  }
+  if (playerSeq.length === trickSeq.length) {
+    trickActive = false;
+    clearTimeout(trickTimer2);
+    trickScoreVal++;
+    trickStreakVal++;
+    document.getElementById('trickScore').textContent = trickScoreVal;
+    document.getElementById('trickStreak').textContent = trickStreakVal;
+    flashResult(trickStreakVal >= 5 ? 'ON FIRE!! 🔥' : 'NAILED IT! ✅', '#FFE000');
+    setTimeout(nextTrick, 900);
+  }
+}
+
+// On-screen D-pad buttons for Trick Master
+const btnStyle = `padding:14px 20px;background:#1a1a1a;color:var(--white);font-family:'Bebas Neue',sans-serif;font-size:1.3rem;border:1px solid #333;cursor:pointer;user-select:none;-webkit-user-select:none;transition:background 0.1s;min-width:52px;`;
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('trickBtns');
+  if (!container) return;
+  [['←','ArrowLeft'],['→','ArrowRight'],['↑','ArrowUp'],['↓','ArrowDown'],['A','A'],['B','B']].forEach(([label]) => {
+    const btn = document.createElement('button');
+    btn.textContent = label;
+    btn.style.cssText = btnStyle;
+    btn.addEventListener('mousedown', e => { e.preventDefault(); pressTrickKey(label); btn.style.background='#333'; });
+    btn.addEventListener('mouseup', () => btn.style.background='#1a1a1a');
+    btn.addEventListener('touchstart', e => { e.preventDefault(); pressTrickKey(label); btn.style.background='#333'; }, {passive:false});
+    btn.addEventListener('touchend', () => btn.style.background='#1a1a1a');
+    container.appendChild(btn);
+  });
+});
+
+// Keyboard support for trick master only when tricks tab is active
+document.addEventListener('keydown', e => {
+  if (document.getElementById('game-tricks').style.display === 'none') return;
+  if (!trickActive) return;
+  const map = { ArrowLeft:'←', ArrowRight:'→', ArrowUp:'↑', ArrowDown:'↓', KeyA:'A', KeyB:'B' };
+  const k = map[e.code];
+  if (!k) return;
+  e.preventDefault();
+  pressTrickKey(k);
+});
+</script>
+
+
+<section class="crew-section" id="crew">
+  <div class="crew-label">The Team</div>
+  <h2 class="crew-heading">The Bolted Crew</h2>
+  <div class="crew-grid" style="grid-template-columns:repeat(4,1fr);max-width:900px;">
+    <div class="crew-card visible">
+      <div class="crew-avatar">R</div>
+      <div class="crew-name">Ray</div>
+      <div class="crew-role">Founder</div>
+      <p style="font-size:0.7rem;color:rgba(245,245,240,0.4);margin-top:12px;line-height:1.7;">i started bolted. im the only one who actually skates so i know exactly how every board should be built fr</p>
+    </div>
+    <div class="crew-card visible" style="transition-delay:0.1s;">
+      <div class="crew-avatar">H</div>
+      <div class="crew-name">Heeran</div>
+      <div class="crew-role">Co-Founder</div>
+      <p style="font-size:0.7rem;color:rgba(245,245,240,0.4);margin-top:12px;line-height:1.7;">co-runs the whole operation. doesn't skate but builds like a pro no cap</p>
+    </div>
+    <div class="crew-card visible" style="transition-delay:0.2s;">
+      <div class="crew-avatar">S</div>
+      <div class="crew-name">Suddays</div>
+      <div class="crew-role">Builder</div>
+      <p style="font-size:0.7rem;color:rgba(245,245,240,0.4);margin-top:12px;line-height:1.7;">handles the builds with us. never touched a board in his life but somehow dialed every time 😭</p>
+    </div>
+    <div class="crew-card visible" style="transition-delay:0.3s;">
+      <div class="crew-avatar">E</div>
+      <div class="crew-name">Emraan</div>
+      <div class="crew-role">Builder</div>
+      <p style="font-size:0.7rem;color:rgba(245,245,240,0.4);margin-top:12px;line-height:1.7;">newest to the crew. jumped straight in and started building — doesn't skate either but we don't talk about that 💀</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-bg-text">BOLTED</div>
+  <h2 class="cta-heading">Ready To<br>Ride?</h2>
+  <p class="cta-sub">Bring your parts. We'll build your dream setup.</p>
+  <a href="#" class="btn-dark" onclick="document.getElementById('bookingModal').style.display='flex';return false;">Book a Build →</a>
+</section>
+
+<!-- BOOKING MODAL -->
+<div id="bookingModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;align-items:center;justify-content:center;">
+  <div style="background:rgba(10,10,10,0.85);backdrop-filter:blur(28px) saturate(1.4);-webkit-backdrop-filter:blur(28px) saturate(1.4);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:56px 48px;max-width:480px;width:90%;position:relative;box-shadow:0 24px 80px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.05);">
+    <button onclick="document.getElementById('bookingModal').style.display='none'" style="position:absolute;top:20px;right:24px;background:none;border:none;color:var(--white);font-size:1.5rem;cursor:pointer;opacity:0.5;">✕</button>
+    <div style="font-size:0.6rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--yellow);margin-bottom:16px;">Book a Build</div>
+    <h3 style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;margin-bottom:32px;">Let's Build Your Board</h3>
+    <div id="bookingForm">
+      <input id="bName" type="text" placeholder="Your name" style="width:100%;background:#1a1a1a;border:none;border-bottom:1px solid #333;padding:14px 0;color:var(--white);font-family:'Space Mono',monospace;font-size:0.8rem;margin-bottom:20px;outline:none;">
+      <input id="bContact" type="text" placeholder="Your phone / instagram" style="width:100%;background:#1a1a1a;border:none;border-bottom:1px solid #333;padding:14px 0;color:var(--white);font-family:'Space Mono',monospace;font-size:0.8rem;margin-bottom:20px;outline:none;">
+      <textarea id="bNotes" placeholder="What parts are you bringing?" rows="3" style="width:100%;background:#1a1a1a;border:none;border-bottom:1px solid #333;padding:14px 0;color:var(--white);font-family:'Space Mono',monospace;font-size:0.8rem;margin-bottom:32px;outline:none;resize:none;"></textarea>
+      <button onclick="submitBooking()" id="submitBtn" style="width:100%;padding:18px;background:var(--yellow);color:var(--black);font-family:'Space Mono',monospace;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;border:none;cursor:pointer;">Send It →</button>
+    </div>
+    <div id="bookingDone" style="display:none;text-align:center;padding:20px 0;">
+      <div style="font-size:2rem;margin-bottom:16px;">🛹</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;margin-bottom:12px;">We got you!</div>
+      <div style="font-size:0.75rem;color:rgba(245,245,240,0.5);line-height:1.8;">we'll hit you up soon to sort out the build. see you soon 🤙</div>
+    </div>
+  </div>
+</div>
+
+<script>
+async function submitBooking() {
+  const name = document.getElementById('bName').value.trim();
+  const contact = document.getElementById('bContact').value.trim();
+  const notes = document.getElementById('bNotes').value.trim();
+  if (!name || !contact) { alert('put ur name and contact bru 🛹'); return; }
+
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  const emails = ['bruhboy1144@gmail.com', 'heeranalile@gmail.com'];
+  const body = `New Bolted booking!\n\nName: ${name}\nContact: ${contact}\nParts: ${notes || 'not specified'}`;
+
+  try {
+    // Send to both emails via formsubmit.co
+    await fetch('https://formsubmit.co/ajax/bruhboy1144@gmail.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ name, contact, parts: notes || 'not specified', _cc: 'heeranalile@gmail.com', _subject: '🛹 New Bolted Build Booking!' })
+    });
+    document.getElementById('bookingForm').style.display = 'none';
+    document.getElementById('bookingDone').style.display = 'block';
+  } catch(e) {
+    btn.textContent = 'Send It →';
+    btn.disabled = false;
+    alert('something went wrong bru, try again');
+  }
+}
+</script>
+
+<!-- DEALS SECTION -->
+<section id="deals" style="padding:140px 48px;background:var(--black);position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,224,0,0.015) 40px,rgba(255,224,0,0.015) 41px);pointer-events:none;"></div>
+  <div style="font-size:0.6rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--yellow);margin-bottom:16px;text-align:center;" class="reveal-up">Deals</div>
+  <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6vw,6rem);text-align:center;letter-spacing:0.04em;margin-bottom:16px;" class="reveal-up">Hook Ups For Real Ones</h2>
+  <p style="text-align:center;font-size:0.75rem;color:rgba(245,245,240,0.4);margin-bottom:80px;letter-spacing:0.1em;" class="reveal-up">win the game below to unlock a deal ticket 👇</p>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;max-width:1000px;margin:0 auto;">
+    <div class="deal-card reveal-up" style="background:#111;padding:48px 36px;position:relative;overflow:hidden;transition:transform 0.3s;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:4rem;color:var(--yellow);line-height:1;">$5 OFF</div>
+      <div style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(245,245,240,0.4);margin:12px 0 20px;">Refer A Friend</div>
+      <p style="font-size:0.75rem;line-height:1.9;color:rgba(245,245,240,0.5);">bring a mate who also needs their board built and get $5 off your next build. both of u win fr</p>
+      <div style="position:absolute;bottom:0;left:0;width:100%;height:2px;background:var(--yellow);transform:scaleX(0);transform-origin:left;transition:transform 0.4s;" class="deal-bar"></div>
+    </div>
+    <div class="deal-card reveal-up" style="background:#FFE000;padding:48px 36px;position:relative;overflow:hidden;transition:transform 0.3s;" data-delay="0.1">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:4rem;color:var(--black);line-height:1;">FREE</div>
+      <div style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(0,0,0,0.5);margin:12px 0 20px;">Grip Tape Cut</div>
+      <p style="font-size:0.75rem;line-height:1.9;color:rgba(0,0,0,0.6);">every full build includes a free custom grip tape cut. we cut it clean every time no extra charge</p>
+      <div style="position:absolute;bottom:0;left:0;width:100%;height:2px;background:var(--black);transform:scaleX(0);transform-origin:left;transition:transform 0.4s;" class="deal-bar"></div>
+    </div>
+    <div class="deal-card reveal-up" style="background:#111;padding:48px 36px;position:relative;overflow:hidden;transition:transform 0.3s;" data-delay="0.2">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:4rem;color:var(--red);line-height:1;">WIN</div>
+      <div style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(245,245,240,0.4);margin:12px 0 20px;">Beat The Game</div>
+      <p style="font-size:0.75rem;line-height:1.9;color:rgba(245,245,240,0.5);">beat the skate gauntlet below and unlock a secret deal ticket. only the hardest skaters make it</p>
+      <div style="position:absolute;bottom:0;left:0;width:100%;height:2px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform 0.4s;" class="deal-bar"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SKATE GAUNTLET GAME -->
+<section id="gauntlet" style="padding:80px 48px 140px;background:#0a0a0a;">
+  <div style="font-size:0.6rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--red);margin-bottom:16px;text-align:center;">Secret Unlock</div>
+  <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,5rem);text-align:center;letter-spacing:0.04em;margin-bottom:8px;">Skate Gauntlet</h2>
+  <p style="text-align:center;font-size:0.7rem;color:rgba(245,245,240,0.3);margin-bottom:48px;letter-spacing:0.1em;">survive 30 seconds → get a deal ticket</p>
+
+  <div style="max-width:900px;margin:0 auto;">
+    <canvas id="gauntletCanvas" width="900" height="360" style="width:100%;background:#0d0d0d;display:block;border:1px solid #1a1a1a;"></canvas>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:0 4px;">
+      <div style="font-size:0.65rem;color:rgba(245,245,240,0.3);letter-spacing:0.1em;">SPACE / TAP to jump &nbsp;|&nbsp; DOUBLE JUMP = trick &nbsp;|&nbsp; S / SWIPE DOWN = duck</div>
+      <div style="display:flex;gap:24px;align-items:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:rgba(245,245,240,0.4);">TIME: <span id="gauntletTime">30</span>s</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--yellow);">SCORE: <span id="gauntletScore">0</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEAL TICKET -->
+  <div id="dealTicket" style="display:none;max-width:600px;margin:60px auto 0;perspective:1000px;">
+    <div id="ticketInner" style="position:relative;transform-style:preserve-3d;transition:transform 0.1s ease-out;cursor:pointer;" onmousemove="ticketParallax(event)" onmouseleave="ticketReset()">
+      <div style="background:var(--yellow);padding:56px 48px;position:relative;overflow:hidden;border-radius:4px;">
+        <!-- Ticket perforations -->
+        <div style="position:absolute;left:0;top:50%;transform:translateY(-50%);width:24px;height:24px;background:#0a0a0a;border-radius:50%;margin-left:-12px;"></div>
+        <div style="position:absolute;right:0;top:50%;transform:translateY(-50%);width:24px;height:24px;background:#0a0a0a;border-radius:50%;margin-right:-12px;"></div>
+        <div style="position:absolute;left:48px;right:48px;top:50%;height:1px;background:rgba(0,0,0,0.15);border-top:2px dashed rgba(0,0,0,0.2);"></div>
+
+        <!-- Top half -->
+        <div style="margin-bottom:40px;">
+          <div style="font-size:0.55rem;letter-spacing:0.4em;text-transform:uppercase;color:rgba(0,0,0,0.4);margin-bottom:8px;">BOLTED CREW — DEAL TICKET</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6vw,5rem);color:var(--black);line-height:1;margin-bottom:8px;">$10 OFF<br>YOUR BUILD</div>
+          <div style="font-size:0.7rem;color:rgba(0,0,0,0.5);letter-spacing:0.1em;">you beat the gauntlet. you earned this fr 🛹</div>
+        </div>
+
+        <!-- Bottom half -->
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;padding-top:40px;">
+          <div>
+            <div style="font-size:0.55rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(0,0,0,0.4);margin-bottom:4px;">Valid for</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--black);">ONE BUILD</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--black);line-height:1;">BOLTED</div>
+            <div style="font-size:0.55rem;letter-spacing:0.3em;color:rgba(0,0,0,0.4);">CUSTOM SKATE BUILDS</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:0.55rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(0,0,0,0.4);margin-bottom:4px;">Code</div>
+            <div id="ticketCode" style="font-family:'Space Mono',monospace;font-size:1rem;color:var(--black);font-weight:700;"></div>
+          </div>
+        </div>
+
+        <!-- Shine overlay -->
+        <div id="ticketShine" style="position:absolute;inset:0;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.25),transparent 60%);pointer-events:none;border-radius:4px;transition:background 0.1s;"></div>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:0.65rem;color:rgba(245,245,240,0.3);margin-top:20px;letter-spacing:0.15em;">screenshot this and show it when you book 🤙</p>
+  </div>
+</section>
+
+<script>
+// ─── DEAL CARDS HOVER ───
+document.querySelectorAll('.deal-card').forEach(card => {
+  card.addEventListener('mouseenter', () => {
+    card.style.transform = 'translateY(-8px)';
+    card.querySelector('.deal-bar').style.transform = 'scaleX(1)';
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'translateY(0)';
+    card.querySelector('.deal-bar').style.transform = 'scaleX(0)';
+  });
+});
+
+// ─── REVEAL UP ANIMATION ───
+const revealUps = document.querySelectorAll('.reveal-up');
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach((e,i) => {
+    if (e.isIntersecting) {
+      const delay = e.target.dataset.delay || 0;
+      setTimeout(() => {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }, delay * 1000);
+    }
+  });
+}, { threshold: 0.1 });
+revealUps.forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(50px)';
+  el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+  revealObs.observe(el);
+});
+
+// ─── TICKET PARALLAX ───
+function ticketParallax(e) {
+  const ticket = document.getElementById('ticketInner');
+  const shine = document.getElementById('ticketShine');
+  const rect = ticket.getBoundingClientRect();
+  const x = (e.clientX - rect.left) / rect.width - 0.5;
+  const y = (e.clientY - rect.top) / rect.height - 0.5;
+  ticket.style.transform = `rotateY(${x * 22}deg) rotateX(${-y * 22}deg) scale(1.03)`;
+  shine.style.background = `radial-gradient(circle at ${(x+0.5)*100}% ${(y+0.5)*100}%,rgba(255,255,255,0.3),transparent 60%)`;
+}
+function ticketReset() {
+  const ticket = document.getElementById('ticketInner');
+  const shine = document.getElementById('ticketShine');
+  ticket.style.transform = 'rotateY(0) rotateX(0) scale(1)';
+  shine.style.background = 'radial-gradient(circle at 30% 30%,rgba(255,255,255,0.2),transparent 60%)';
+}
+
+// ─── SKATE GAUNTLET GAME ───
+(function(){
+  const canvas = document.getElementById('gauntletCanvas');
+  const ctx    = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  // Ground: skater feet sit at GY, ground line drawn at GY
+  const GY = H - 58;
+
+  let sk, obs, sparks, score, spd, frame, raf, running, jCount, tLeft, tInt, started;
+  let trick = { on:false, name:'', t:0, dur:44 };
+
+  const TRICKS = ['KICKFLIP','HEELFLIP','360 FLIP','VARIAL','HARDFLIP'];
+
+  function genCode(){ return 'BOLT-'+Math.random().toString(36).slice(2,6).toUpperCase(); }
+
+  // ── init / restart ──────────────────────────────────────────
+  function init(){
+    sk = { x:110, y:GY, vy:0, onGround:true, ducking:false };
+    obs=[]; sparks=[];
+    score=0; spd=3.8; frame=0; jCount=0;
+    trick={on:false,name:'',t:0,dur:44};
+    tLeft=30; running=true; started=true;
+    document.getElementById('gauntletScore').textContent='0';
+    document.getElementById('gauntletTime').textContent='30';
+    clearInterval(tInt);
+    tInt=setInterval(()=>{
+      if(!running){clearInterval(tInt);return;}
+      tLeft--;
+      document.getElementById('gauntletTime').textContent=tLeft;
+      if(tLeft<=0){clearInterval(tInt);win();}
+    },1000);
+    cancelAnimationFrame(raf);
+    loop();
+  }
+
+  // ── controls ────────────────────────────────────────────────
+  function doJump(){
+    if(sk.ducking) return;
+    if(jCount===0){
+      sk.vy=-11; sk.onGround=false; jCount=1;
+    } else if(jCount===1 && !sk.onGround){
+      sk.vy=-9; jCount=2;
+      // trigger trick animation
+      const name=TRICKS[Math.floor(Math.random()*TRICKS.length)];
+      trick={on:true,name,t:0,dur:44};
+      pop(sk.x+24, sk.y+20,'#FFE000');
+    }
+  }
+  function doDuck(on){
+    if(sk.onGround) sk.ducking=on;
+  }
+
+  // ── particle burst ──────────────────────────────────────────
+  function pop(x,y,col){
+    for(let i=0;i<10;i++){
+      const a=Math.PI*2*i/10;
+      sparks.push({x,y,vx:Math.cos(a)*3,vy:Math.sin(a)*3,life:1,col});
+    }
+  }
+
+  // ── draw skater ─────────────────────────────────────────────
+  function drawSk(){
+    const x=sk.x, y=sk.y;
+    const duck=sk.ducking;
+    const bob=sk.onGround&&!duck?Math.sin(frame*0.3)*1.5:0;
+
+    if(duck){
+      // crouched — whole skater is half height, board lower
+      // board
+      ctx.fillStyle='#ccc';
+      ctx.beginPath(); ctx.roundRect(x,y+20,44,7,3); ctx.fill();
+      ctx.fillStyle='#888';
+      ctx.fillRect(x+4,y+25,9,4); ctx.fillRect(x+32,y+25,9,4);
+      ctx.fillStyle='#eee';
+      ctx.beginPath(); ctx.arc(x+6, y+31,4,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x+38,y+31,4,0,Math.PI*2); ctx.fill();
+      // torso squat
+      ctx.fillStyle='#FFE000';
+      ctx.fillRect(x+8,y+6,20,16);
+      // head
+      ctx.beginPath(); ctx.arc(x+18,y+3,8,0,Math.PI*2);
+      ctx.fillStyle='#f5c89a'; ctx.fill();
+      // arms out
+      ctx.strokeStyle='#FFE000'; ctx.lineWidth=3; ctx.lineCap='round';
+      ctx.beginPath(); ctx.moveTo(x+8,y+12); ctx.lineTo(x-8,y+14); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x+28,y+12); ctx.lineTo(x+44,y+14); ctx.stroke();
+      // duck label
+      ctx.font="bold 12px 'Bebas Neue',sans-serif";
+      ctx.fillStyle='rgba(100,200,255,0.9)';
+      ctx.textAlign='center'; ctx.fillText('DUCK',x+18,y-4); ctx.textAlign='left';
+      return;
+    }
+
+    // normal / airborne
+    // board
+    const bcol = sk.onGround ? '#ccc' : '#FFE000';
+    ctx.fillStyle=bcol;
+    ctx.beginPath(); ctx.roundRect(x-2,y+40,48,7,3); ctx.fill();
+    ctx.fillStyle='#888';
+    ctx.fillRect(x+3,y+45,9,5); ctx.fillRect(x+32,y+45,9,5);
+    ctx.fillStyle='#eee';
+    ctx.beginPath(); ctx.arc(x+5, y+52,5,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x+39,y+52,5,0,Math.PI*2); ctx.fill();
+    // torso
+    ctx.fillStyle='#FFE000';
+    ctx.fillRect(x+8,y+14+bob,20,26);
+    // head
+    ctx.beginPath(); ctx.arc(x+18,y+8+bob,9,0,Math.PI*2);
+    ctx.fillStyle='#f5c89a'; ctx.fill();
+    // arms
+    ctx.strokeStyle='#FFE000'; ctx.lineWidth=3; ctx.lineCap='round';
+    const as=sk.onGround?Math.sin(frame*0.2)*5:10;
+    ctx.beginPath(); ctx.moveTo(x+8,y+22+bob); ctx.lineTo(x-6,y+32+bob+as); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x+28,y+22+bob); ctx.lineTo(x+42,y+32+bob-as); ctx.stroke();
+    // legs
+    const lk=sk.onGround?Math.sin(frame*0.32)*4:7;
+    ctx.beginPath(); ctx.moveTo(x+12,y+40+bob); ctx.lineTo(x+5,y+50+bob+lk); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x+22,y+40+bob); ctx.lineTo(x+30,y+50+bob-lk); ctx.stroke();
+
+    // trick board flip overlay
+    if(trick.on){
+      const p=trick.t/trick.dur;
+      const flipScale=Math.cos(p*Math.PI*2);
+      const spin=trick.name.includes('360')?p*Math.PI*2:0;
+      const bCx=x+22, bCy=y+47;
+      ctx.save();
+      ctx.translate(bCx,bCy);
+      ctx.rotate(spin);
+      ctx.scale(1,flipScale||0.01);
+      ctx.fillStyle=flipScale>=0?'#FFE000':'#222';
+      ctx.beginPath();
+      ctx.roundRect(-24,-4,48,8,3);
+      ctx.fill();
+      ctx.strokeStyle='rgba(0,0,0,0.4)'; ctx.lineWidth=1.5; ctx.stroke();
+      ctx.restore();
+      // trick name
+      const ta=Math.sin(p*Math.PI);
+      ctx.globalAlpha=ta;
+      ctx.font="bold 16px 'Bebas Neue',sans-serif";
+      ctx.fillStyle='#FFE000';
+      ctx.textAlign='center';
+      ctx.fillText(trick.name,x+18,y-8);
+      ctx.textAlign='left';
+      ctx.globalAlpha=1;
+    }
+  }
+
+  // ── obstacle spawner ─────────────────────────────────────────
+  // TYPES:
+  //   cone     h=32  — jump over (short)
+  //   tallcone h=50  — jump over (tall)
+  //   rail     h=12  — jump over (wide low bar, grind anim)
+  //   lowbar   barH=44,h=10 — DUCK under
+  // Pattern ensures jump/duck variety, never 3 same in a row
+  let lastSpawn='';
+  function spawnOb(){
+    let pool;
+    if(lastSpawn==='lowbar') pool=['cone','tallcone','rail','cone','rail'];
+    else if(lastSpawn==='rail') pool=['cone','lowbar','cone','tallcone'];
+    else pool=['cone','tallcone','rail','lowbar'];
+    const t=pool[Math.floor(Math.random()*pool.length)];
+    lastSpawn=t;
+    const cfgs={
+      cone:     {w:22,h:32,col:'#FF2D00'},
+      tallcone: {w:22,h:50,col:'#FF6600'},
+      rail:     {w:88,h:12,col:'#aaa'},
+      lowbar:   {w:84,h:10,col:'#4488FF',barH:44},
+    };
+    obs.push({x:W+10,type:t,...cfgs[t]});
+  }
+
+  // ── main loop ────────────────────────────────────────────────
+  function loop(){
+    if(!running) return;
+    ctx.clearRect(0,0,W,H);
+
+    // bg
+    ctx.fillStyle='#0d0d0d'; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='rgba(255,224,0,0.025)'; ctx.lineWidth=1;
+    for(let i=0;i<7;i++){
+      const lx=((frame*1.5+i*(W/7))%W);
+      ctx.beginPath(); ctx.moveTo(lx,0); ctx.lineTo(lx,H); ctx.stroke();
+    }
+
+    // timer bar
+    const pct=tLeft/30;
+    ctx.fillStyle='#111'; ctx.fillRect(0,0,W,5);
+    ctx.fillStyle=pct>0.5?'#FFE000':pct>0.25?'#FF6600':'#FF2D00';
+    ctx.fillRect(0,0,W*pct,5);
+
+    // ground
+    ctx.fillStyle='#181818'; ctx.fillRect(0,GY,W,H-GY);
+    ctx.strokeStyle='#FFE000'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(0,GY); ctx.lineTo(W,GY); ctx.stroke();
+    ctx.strokeStyle='#252525'; ctx.lineWidth=1; ctx.setLineDash([28,18]);
+    ctx.beginPath(); ctx.moveTo((frame*2)%46-46,GY+14); ctx.lineTo(W,GY+14); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // physics
+    sk.vy+=0.52; sk.y+=sk.vy;
+    if(sk.y>=GY){sk.y=GY; sk.vy=0; sk.onGround=true; jCount=0;}
+
+    drawSk();
+
+    // advance trick timer
+    if(trick.on){ trick.t++; if(trick.t>=trick.dur) trick.on=false; }
+
+    // speed / frame
+    spd=3.8+(30-tLeft)*0.09;
+    frame++;
+
+    // spawn
+    const sr=Math.max(62,102-(30-tLeft)*2);
+    if(frame%sr===0) spawnOb();
+
+    // ── obstacles ──
+    // skater hitbox: left/right fixed, top/bottom based on actual y + ducking
+    const skL=sk.x+6, skR=sk.x+38;
+    const skBottom=sk.y+56;        // bottom of wheels
+    const skTop   =sk.ducking ? sk.y+2 : sk.y;   // top of head
+
+    for(let i=obs.length-1;i>=0;i--){
+      const ob=obs[i];
+      ob.x-=spd;
+
+      // all obstacles sit on the ground — their bottom = GY
+      const obBottom=GY;
+
+      if(ob.type==='cone'||ob.type==='tallcone'){
+        const obTop=GY-ob.h;
+        ctx.fillStyle=ob.col;
+        ctx.beginPath();
+        ctx.moveTo(ob.x+ob.w/2,obTop);
+        ctx.lineTo(ob.x,obBottom);
+        ctx.lineTo(ob.x+ob.w,obBottom);
+        ctx.closePath(); ctx.fill();
+        ctx.fillStyle='rgba(255,255,255,0.45)';
+        ctx.fillRect(ob.x+3,obTop+ob.h*0.52,ob.w-6,5);
+        ctx.fillStyle='rgba(255,255,255,0.15)';
+        ctx.fillRect(ob.x-2,obBottom-5,ob.w+4,5);
+
+      } else if(ob.type==='rail'){
+        const obTop=GY-ob.h;
+        // posts
+        ctx.fillStyle='#555';
+        ctx.fillRect(ob.x+8,obTop,4,ob.h);
+        ctx.fillRect(ob.x+ob.w-12,obTop,4,ob.h);
+        // bar
+        ctx.fillStyle='#bbb'; ctx.fillRect(ob.x,obTop,ob.w,5);
+        ctx.fillStyle='#ddd'; ctx.fillRect(ob.x,obTop,ob.w,2);
+        ctx.font="10px 'Bebas Neue',sans-serif"; ctx.fillStyle='rgba(255,224,0,0.45)';
+        ctx.textAlign='center'; ctx.fillText('GRIND',ob.x+ob.w/2,obTop-4); ctx.textAlign='left';
+        // grind sparks when airborne over rail
+        if(!sk.onGround && skR>ob.x && skL<ob.x+ob.w && frame%3===0)
+          pop(ob.x+ob.w*Math.random(),obTop,'#FFE000');
+
+      } else if(ob.type==='lowbar'){
+        // bar floats at barH above ground
+        const barY=GY-ob.barH;
+        ctx.fillStyle='#3355aa';
+        ctx.fillRect(ob.x+2,barY,4,ob.barH);
+        ctx.fillRect(ob.x+ob.w-6,barY,4,ob.barH);
+        ctx.fillStyle=ob.col; ctx.fillRect(ob.x,barY,ob.w,ob.h);
+        ctx.fillStyle='rgba(140,190,255,0.35)'; ctx.fillRect(ob.x,barY,ob.w,3);
+        ctx.font="bold 11px 'Bebas Neue',sans-serif";
+        ctx.fillStyle='rgba(120,180,255,0.8)';
+        ctx.textAlign='center'; ctx.fillText('↓ DUCK',ob.x+ob.w/2,barY-5); ctx.textAlign='left';
+      }
+
+      // collision
+      let hit=false;
+      if(ob.type==='cone'||ob.type==='tallcone'){
+        const obTop=GY-ob.h;
+        // standard box hit — must jump over top
+        if(skR>ob.x+3 && skL<ob.x+ob.w-3 && skBottom>obTop+3 && skTop<obBottom) hit=true;
+
+      } else if(ob.type==='rail'){
+        const obTop=GY-ob.h;
+        // on ground = smash. airborne = grind (safe)
+        if(sk.onGround && skR>ob.x+3 && skL<ob.x+ob.w-3) hit=true;
+
+      } else if(ob.type==='lowbar'){
+        const barY=GY-ob.barH;
+        // bar zone: barY to barY+h. Duck gets skTop up above it
+        if(skR>ob.x+3 && skL<ob.x+ob.w-3 && skTop<barY+ob.h && skBottom>barY) hit=true;
+      }
+
+      if(hit){gameOver();return;}
+      if(ob.x+ob.w<0){
+        obs.splice(i,1); score++;
+        document.getElementById('gauntletScore').textContent=score;
+      }
+    }
+
+    // sparks
+    for(let i=sparks.length-1;i>=0;i--){
+      const s=sparks[i];
+      s.x+=s.vx; s.y+=s.vy; s.vy+=0.1; s.life-=0.025;
+      ctx.globalAlpha=Math.max(0,s.life);
+      ctx.fillStyle=s.col;
+      ctx.beginPath(); ctx.arc(s.x,s.y,3,0,Math.PI*2); ctx.fill();
+      if(s.life<=0) sparks.splice(i,1);
+    }
+    ctx.globalAlpha=1;
+
+    ctx.font="10px 'Space Mono',monospace";
+    ctx.fillStyle='rgba(255,224,0,0.18)';
+    ctx.fillText(`SPEED x${spd.toFixed(1)}`,12,24);
+
+    raf=requestAnimationFrame(loop);
+  }
+
+  function gameOver(){
+    running=false; clearInterval(tInt); cancelAnimationFrame(raf);
+    ctx.fillStyle='rgba(8,8,8,0.88)'; ctx.fillRect(0,0,W,H);
+    ctx.textAlign='center';
+    ctx.font="bold 76px 'Bebas Neue',sans-serif"; ctx.fillStyle='#FF2D00';
+    ctx.fillText('BAILED!',W/2,H/2-24);
+    ctx.font="20px 'Bebas Neue',sans-serif"; ctx.fillStyle='#FFE000';
+    ctx.fillText(`SCORE: ${score}  |  ${30-tLeft}s survived`,W/2,H/2+18);
+    ctx.font="12px 'Space Mono',monospace"; ctx.fillStyle='rgba(245,245,240,0.4)';
+    ctx.fillText('SPACE / TAP to retry',W/2,H/2+54);
+    ctx.textAlign='left';
+    document.getElementById('dealTicket').style.display='none';
+  }
+
+  function win(){
+    running=false; cancelAnimationFrame(raf);
+    ctx.fillStyle='rgba(8,8,8,0.88)'; ctx.fillRect(0,0,W,H);
+    ctx.textAlign='center';
+    ctx.font="bold 76px 'Bebas Neue',sans-serif"; ctx.fillStyle='#FFE000';
+    ctx.fillText('YOU WON!!',W/2,H/2-24);
+    ctx.font="20px 'Bebas Neue',sans-serif"; ctx.fillStyle='rgba(245,245,240,0.7)';
+    ctx.fillText('scroll down for your deal ticket 🎟️',W/2,H/2+18);
+    ctx.textAlign='left';
+    pop(W/2,H/2,'#FFE000'); pop(W/3,H*0.4,'#FF2D00'); pop(W*0.7,H*0.4,'#FFE000');
+    if(window._boltedWin) window._boltedWin(); document.getElementById('ticketCode').textContent=genCode();
+    const t=document.getElementById('dealTicket');
+    t.style.display='block'; t.style.opacity='0'; t.style.transform='translateY(40px)';
+    t.style.transition='opacity 0.8s ease,transform 0.8s ease';
+    setTimeout(()=>{t.style.opacity='1';t.style.transform='translateY(0)';},400);
+  }
+
+  // controls
+  document.addEventListener('keydown',e=>{
+    if(document.activeElement.tagName==='INPUT'||document.activeElement.tagName==='TEXTAREA') return;
+    if(e.code==='Space'){e.preventDefault(); if(!started||!running)init(); else doJump();}
+    if((e.code==='KeyS'||e.code==='ArrowDown')&&running){e.preventDefault();doDuck(true);}
+  });
+  document.addEventListener('keyup',e=>{
+    if(e.code==='KeyS'||e.code==='ArrowDown') doDuck(false);
+  });
+  let ty0=0;
+  canvas.addEventListener('touchstart',e=>{e.preventDefault();ty0=e.touches[0].clientY;if(!started||!running)init();else doJump();},{passive:false});
+  canvas.addEventListener('touchmove',e=>{e.preventDefault();if(e.touches[0].clientY-ty0>30)doDuck(true);},{passive:false});
+  canvas.addEventListener('touchend',e=>{e.preventDefault();doDuck(false);},{passive:false});
+  canvas.addEventListener('click',()=>{if(!started||!running)init();});
+
+  // start screen
+  ctx.fillStyle='#0d0d0d'; ctx.fillRect(0,0,W,H);
+  ctx.textAlign='center';
+  ctx.font="bold 56px 'Bebas Neue',sans-serif"; ctx.fillStyle='#FFE000';
+  ctx.fillText('SKATE GAUNTLET',W/2,H/2-28);
+  ctx.font="13px 'Space Mono',monospace"; ctx.fillStyle='rgba(245,245,240,0.4)';
+  ctx.fillText('SPACE / TAP to start  —  survive 30 seconds',W/2,H/2+12);
+  ctx.font="11px 'Space Mono',monospace"; ctx.fillStyle='rgba(245,245,240,0.22)';
+  ctx.fillText('JUMP over cones & rails  |  S or ↓ to duck under bars',W/2,H/2+40);
+  ctx.textAlign='left';
+})();
+</script>
+
+
+<footer>
+  <div class="footer-logo">Bolted</div>
+  <div class="footer-copy">© 2025 Bolted. All rights reserved.</div>
+  <div class="footer-right">Custom Skateboard Builds<br>by the crew</div>
+</footer>
+
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+
+function animateRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '6px';
+    cursor.style.height = '6px';
+    ring.style.width = '56px';
+    ring.style.height = '56px';
+    ring.style.opacity = '0.8';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '12px';
+    cursor.style.height = '12px';
+    ring.style.width = '36px';
+    ring.style.height = '36px';
+    ring.style.opacity = '0.5';
+  });
+});
+
+// Scroll reveal
+const revealEls = document.querySelectorAll('.step-card, .price-card, .crew-card');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0, rootMargin: '0px 0px -50px 0px' });
+revealEls.forEach(el => observer.observe(el));
+
+// Parallax text
+const parallaxText = document.getElementById('parallaxText');
+const parallaxStrip = parallaxText?.closest('.parallax-strip');
+if (parallaxText && parallaxStrip) {
+  window.addEventListener('scroll', () => {
+    const rect = parallaxStrip.getBoundingClientRect();
+    const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+    const offset = (progress - 0.5) * -200;
+    parallaxText.style.transform = `translateX(${offset}px)`;
+  });
+}
+
+// ─── INTERACTIVE BOARD CANVAS ───
+(function() {
+  const canvas = document.getElementById('boardCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const CW = canvas.width, CH = canvas.height;
+  const cx = CW / 2, cy = CH / 2;
+
+  const tricks = ['KICKFLIP!','HEELFLIP!','360 FLIP!','VARIAL!','HARDFLIP!'];
+
+  let state = {
+    // board orientation: 0 = vertical, 1 = horizontal
+    horizontal: false,
+    // base float animation
+    floatY: 0,
+    floatAngle: 0,
+    floatT: 0,
+    // trick animation
+    tricking: false,
+    trickType: 'kickflip', // kickflip or heelflip
+    trickFlip: 0,     // 0..1 flip progress (rotateX / scaleY flip)
+    trickSpin: 0,     // board spin (360)
+    trickJump: 0,     // vertical jump arc 0..1
+    trickDir: 1,
+    trickFrame: 0,
+    trickDuration: 40,
+    // hover
+    hovered: false,
+    // orientation transition
+    orientT: 0,  // 0=vertical, 1=horizontal
+    orientDir: 0, // -1,0,1
+  };
+
+  function easeInOut(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+
+  function drawBoard(flipProgress, spinAngle, isHoriz) {
+    // Board dimensions
+    const BW = isHoriz > 0.5 ? 240 : 70;
+    const BH = isHoriz > 0.5 ? 70 : 240;
+    const BW2 = 70 + (240-70) * isHoriz;
+    const BH2 = 240 + (70-240) * isHoriz;
+
+    ctx.save();
+
+    // Flip effect: scaleY for kickflip, scaleX for heelflip
+    const flipScale = Math.cos(flipProgress * Math.PI * 2);
+    if (state.trickType === 'kickflip') {
+      ctx.scale(1, flipScale);
+    } else {
+      ctx.scale(flipScale, 1);
+    }
+
+    // Spin
+    ctx.rotate(spinAngle);
+
+    const hw = BW2 / 2, hh = BH2 / 2;
+    const nose = 22 * (1 - isHoriz) + 8 * isHoriz;
+    const tail = 26 * (1 - isHoriz) + 8 * isHoriz;
+
+    // Board shape
+    ctx.beginPath();
+    if (isHoriz < 0.5) {
+      // Vertical board shape
+      ctx.moveTo(-hw + 8, -hh + nose);
+      ctx.quadraticCurveTo(-hw, -hh + nose, -hw, -hh + nose + 10);
+      ctx.lineTo(-hw, hh - tail - 10);
+      ctx.quadraticCurveTo(-hw, hh - tail, -hw + 8, hh - tail);
+      ctx.lineTo(hw - 8, hh - tail);
+      ctx.quadraticCurveTo(hw, hh - tail, hw, hh - tail - 10);
+      ctx.lineTo(hw, -hh + nose + 10);
+      ctx.quadraticCurveTo(hw, -hh + nose, hw - 8, -hh + nose);
+      ctx.closePath();
+    } else {
+      // Horizontal board shape
+      ctx.moveTo(-hw + nose, -hh + 8);
+      ctx.quadraticCurveTo(-hw + nose, -hh, -hw + nose + 10, -hh);
+      ctx.lineTo(hw - tail - 10, -hh);
+      ctx.quadraticCurveTo(hw - tail, -hh, hw - tail, -hh + 8);
+      ctx.lineTo(hw - tail, hh - 8);
+      ctx.quadraticCurveTo(hw - tail, hh, hw - tail - 10, hh);
+      ctx.lineTo(-hw + nose + 10, hh);
+      ctx.quadraticCurveTo(-hw + nose, hh, -hw + nose, hh - 8);
+      ctx.closePath();
+    }
+
+    // Board fill
+    const grad = ctx.createLinearGradient(-hw, -hh, hw, hh);
+    grad.addColorStop(0, '#2a2a2a');
+    grad.addColorStop(1, '#111');
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Grip tape stripes
+    ctx.save();
+    ctx.clip();
+    ctx.strokeStyle = 'rgba(255,224,0,0.07)';
+    ctx.lineWidth = 4;
+    for (let i = -300; i < 300; i += 8) {
+      ctx.beginPath();
+      if (isHoriz < 0.5) {
+        ctx.moveTo(i, -hh); ctx.lineTo(i + 20, hh);
+      } else {
+        ctx.moveTo(-hw, i); ctx.lineTo(hw, i + 20);
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // BOLTED text
+    ctx.save();
+    ctx.rotate(isHoriz > 0.5 ? 0 : 0);
+    ctx.font = "bold 11px 'Bebas Neue', sans-serif";
+    ctx.fillStyle = 'rgba(255,224,0,0.7)';
+    ctx.textAlign = 'center';
+    ctx.letterSpacing = '3px';
+    ctx.fillText('BOLTED', 0, 5);
+    ctx.restore();
+
+    // Board outline
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Trucks
+    const truckColor = '#999';
+    const truckW = isHoriz < 0.5 ? BW2 + 20 : 14;
+    const truckH = isHoriz < 0.5 ? 14 : BH2 + 20;
+    const truckOffset = isHoriz < 0.5
+      ? [{ x: 0, y: -hh + 44 }, { x: 0, y: hh - 44 }]
+      : [{ x: -hw + 44, y: 0 }, { x: hw - 44, y: 0 }];
+
+    truckOffset.forEach(t => {
+      ctx.fillStyle = truckColor;
+      ctx.fillRect(t.x - truckW/2, t.y - truckH/2, truckW, truckH);
+      // wheels
+      const wPositions = isHoriz < 0.5
+        ? [{ x: t.x - truckW/2 - 2, y: t.y }, { x: t.x + truckW/2 + 2, y: t.y }]
+        : [{ x: t.x, y: t.y - truckH/2 - 2 }, { x: t.x, y: t.y + truckH/2 + 2 }];
+      wPositions.forEach(w => {
+        ctx.beginPath();
+        ctx.arc(w.x, w.y, isHoriz < 0.5 ? 9 : 9, 0, Math.PI * 2);
+        ctx.fillStyle = '#f0f0f0';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(w.x, w.y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = '#aaa';
+        ctx.fill();
+      });
+    });
+
+    ctx.restore();
+  }
+
+  function doTrick() {
+    if (state.tricking) return;
+    const tricks2 = ['kickflip','heelflip','kickflip','heelflip','360'];
+    state.trickType = tricks2[Math.floor(Math.random() * tricks2.length)];
+    state.tricking = true;
+    state.trickFrame = 0;
+    state.trickDuration = 48;
+
+    const label = document.getElementById('trickLabel');
+    const names = { kickflip:'KICKFLIP!', heelflip:'HEELFLIP!', '360':'360 FLIP!' };
+    label.textContent = names[state.trickType] || 'TRICK!';
+    label.style.opacity = '1';
+    setTimeout(() => { label.style.opacity = '0'; }, 1000);
+  }
+
+  function toggleOrientation() {
+    state.horizontal = !state.horizontal;
+    state.orientDir = state.horizontal ? 1 : -1;
+  }
+
+  let rafId;
+  function animate() {
+    rafId = requestAnimationFrame(animate);
+    ctx.clearRect(0, 0, CW, CH);
+
+    // Float idle animation
+    state.floatT += 0.018;
+    state.floatY = Math.sin(state.floatT) * 12;
+    state.floatAngle = Math.sin(state.floatT * 0.7) * 0.08;
+
+    // Orientation transition
+    const targetOrient = state.horizontal ? 1 : 0;
+    state.orientT += (targetOrient - state.orientT) * 0.1;
+
+    // Trick animation
+    let jumpOffset = 0;
+    let flipProg = 0;
+    let spinProg = 0;
+
+    if (state.tricking) {
+      state.trickFrame++;
+      const tf = state.trickFrame / state.trickDuration;
+      jumpOffset = -Math.sin(tf * Math.PI) * 80;
+      flipProg = tf;
+      if (state.trickType === '360') spinProg = tf * Math.PI * 2;
+      if (state.trickFrame >= state.trickDuration) {
+        state.tricking = false;
+        state.trickFrame = 0;
+      }
+    }
+
+    ctx.save();
+    ctx.translate(cx, cy + state.floatY + jumpOffset);
+    ctx.rotate(state.tricking ? 0 : state.floatAngle);
+
+    drawBoard(flipProg, spinProg, state.orientT);
+    ctx.restore();
+
+    // Hover glow
+    if (state.hovered && !state.tricking) {
+      ctx.save();
+      ctx.translate(cx, cy + state.floatY);
+      ctx.beginPath();
+      ctx.arc(0, 0, 60, 0, Math.PI * 2);
+      const g = ctx.createRadialGradient(0, 0, 10, 0, 0, 60);
+      g.addColorStop(0, 'rgba(255,224,0,0.12)');
+      g.addColorStop(1, 'rgba(255,224,0,0)');
+      ctx.fillStyle = g;
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  // Events
+  canvas.addEventListener('mouseenter', () => { state.hovered = true; toggleOrientation(); });
+  canvas.addEventListener('mouseleave', () => { state.hovered = false; toggleOrientation(); });
+  canvas.addEventListener('click', () => doTrick());
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); doTrick(); }, { passive: false });
+
+  animate();
+})();
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+</script>
+
+<!-- BOLTED LIVE CHAT WIDGET -->
+<style>
+  #boltedChat {
+    position:fixed; bottom:28px; right:28px; z-index:9000;
+    font-family:'Space Mono',monospace;
+  }
+  #chatBubble {
+    width:56px;height:56px;border-radius:50%;
+    background:rgba(255,224,0,0.9);
+    backdrop-filter:blur(16px) saturate(1.8);
+    -webkit-backdrop-filter:blur(16px) saturate(1.8);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    box-shadow:0 4px 24px rgba(255,224,0,0.35),inset 0 1px 0 rgba(255,255,255,0.4);
+    transition:transform 0.2s,box-shadow 0.2s;
+    margin-left:auto;
+    border:1px solid rgba(255,255,255,0.3);
+  }
+  #chatBubble:hover{transform:scale(1.12);box-shadow:0 8px 32px rgba(255,224,0,0.5),inset 0 1px 0 rgba(255,255,255,0.5);}
+  #chatBubble svg{width:26px;height:26px;}
+  #chatUnread {
+    position:absolute;top:-4px;right:-4px;width:18px;height:18px;
+    background:#FF2D00;border-radius:50%;font-size:10px;font-weight:700;
+    color:#fff;display:flex;align-items:center;justify-content:center;
+    opacity:0;transition:opacity 0.2s;pointer-events:none;
+  }
+  #chatBox {
+    display:none;
+    flex-direction:column;
+    width:340px;height:480px;
+    background:rgba(14,14,14,0.75);
+    backdrop-filter:blur(24px) saturate(1.4);
+    -webkit-backdrop-filter:blur(24px) saturate(1.4);
+    border:1px solid rgba(255,224,0,0.18);
+    border-radius:16px;overflow:hidden;
+    box-shadow:0 8px 40px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.06);
+    margin-bottom:12px;
+  }
+  #chatHeader {
+    background:rgba(255,224,0,0.85);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    padding:14px 20px;
+    display:flex;justify-content:space-between;align-items:center;
+    border-bottom:1px solid rgba(255,255,255,0.15);
+  }
+  #chatHeader span {
+    font-family:'Bebas Neue',sans-serif;font-size:1.1rem;
+    letter-spacing:0.12em;color:#080808;
+  }
+  #chatClose {
+    background:none;border:none;font-size:1.2rem;cursor:pointer;
+    color:#080808;opacity:0.6;padding:0;line-height:1;
+  }
+  #chatStatus {
+    font-size:0.55rem;letter-spacing:0.15em;color:rgba(8,8,8,0.5);
+    text-transform:uppercase;
+  }
+  #chatMessages {
+    flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;
+  }
+  #chatMessages::-webkit-scrollbar{width:4px;}
+  #chatMessages::-webkit-scrollbar-track{background:#1a1a1a;}
+  #chatMessages::-webkit-scrollbar-thumb{background:#333;}
+  .chat-msg {
+    max-width:78%;padding:10px 14px;border-radius:6px;
+    font-size:0.7rem;line-height:1.6;word-break:break-word;
+  }
+  .chat-msg.them {
+    background:#1a1a1a;color:#f5f5f0;align-self:flex-start;
+    border-bottom-left-radius:2px;
+  }
+  .chat-msg.us {
+    background:#FFE000;color:#080808;align-self:flex-end;
+    border-bottom-right-radius:2px;font-weight:700;
+  }
+  .chat-msg .msg-time {
+    font-size:0.55rem;opacity:0.4;margin-top:4px;display:block;
+  }
+  .chat-typing {
+    align-self:flex-start;background:#1a1a1a;padding:10px 16px;
+    border-radius:6px;display:flex;gap:4px;align-items:center;
+  }
+  .chat-typing span {
+    width:6px;height:6px;background:#444;border-radius:50%;
+    animation:typingBounce 1.2s infinite;
+  }
+  .chat-typing span:nth-child(2){animation-delay:0.2s;}
+  .chat-typing span:nth-child(3){animation-delay:0.4s;}
+  @keyframes typingBounce{0%,80%,100%{transform:translateY(0);}40%{transform:translateY(-6px);background:#FFE000;}}
+  #chatInputRow {
+    padding:12px;border-top:1px solid #1a1a1a;
+    display:flex;gap:8px;background:#0d0d0d;
+  }
+  #chatInput {
+    flex:1;background:#1a1a1a;border:1px solid #2a2a2a;
+    padding:10px 14px;color:#f5f5f0;font-family:'Space Mono',monospace;
+    font-size:0.7rem;border-radius:4px;outline:none;
+    transition:border-color 0.2s;
+  }
+  #chatInput:focus{border-color:#FFE000;}
+  #chatSend {
+    background:#FFE000;color:#080808;border:none;
+    padding:10px 16px;font-family:'Space Mono',monospace;
+    font-size:0.7rem;font-weight:700;border-radius:4px;
+    cursor:pointer;letter-spacing:0.1em;transition:transform 0.15s;
+  }
+  #chatSend:hover{transform:scale(1.05);}
+  #chatNameStep {
+    padding:20px;display:flex;flex-direction:column;gap:12px;
+  }
+  #chatNameStep p{font-size:0.72rem;color:rgba(245,245,240,0.6);line-height:1.7;}
+  #chatNameInput {
+    background:#1a1a1a;border:1px solid #333;padding:10px 14px;
+    color:#f5f5f0;font-family:'Space Mono',monospace;font-size:0.75rem;
+    border-radius:4px;outline:none;
+  }
+  #chatNameInput:focus{border-color:#FFE000;}
+  #chatNameBtn {
+    background:#FFE000;color:#080808;border:none;padding:12px;
+    font-family:'Space Mono',monospace;font-size:0.7rem;font-weight:700;
+    letter-spacing:0.15em;text-transform:uppercase;border-radius:4px;
+    cursor:pointer;
+  }
+</style>
+
+<div id="boltedChat">
+  <div id="chatBox">
+    <div id="chatHeader">
+      <div>
+        <span>Bolted Live Chat 🛹</span><br>
+        <span id="chatStatus">usually replies in minutes</span>
+      </div>
+      <button id="chatClose" onclick="toggleChat()">✕</button>
+    </div>
+    <!-- Name step -->
+    <div id="chatNameStep">
+      <p>hey! drop your name + email so we can reply back 🤙</p>
+      <input id="chatNameInput" type="text" placeholder="your name...">
+      <input id="chatEmailInput" type="email" placeholder="your email (so we can reply)" style="background:#1a1a1a;border:1px solid #333;padding:10px 14px;color:#f5f5f0;font-family:'Space Mono',monospace;font-size:0.7rem;border-radius:4px;outline:none;width:100%;margin-top:8px;">
+      <button id="chatNameBtn" onclick="startChat()">Start Chatting →</button>
+    </div>
+    <!-- Chat area (hidden until name given) -->
+    <div id="chatArea" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
+      <div id="chatMessages"></div>
+      <div id="chatInputRow">
+        <input id="chatInput" type="text" placeholder="message bolted..." onkeydown="if(event.key==='Enter')sendChatMsg()">
+        <button id="chatSend" onclick="sendChatMsg()">Send</button>
+      </div>
+    </div>
+  </div>
+  <div style="position:relative;display:inline-block;">
+    <button id="chatBubble" onclick="toggleChat()" title="Chat with Bolted">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#080808" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+    </button>
+    <div id="chatUnread">1</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  let chatOpen=false, chatStarted=false, chatName='', chatEmail='', chatHistory=[];
+  let notifShown=false;
+
+  // Show unread dot after 3s
+  setTimeout(()=>{
+    if(!chatOpen){
+      document.getElementById('chatUnread').style.opacity='1';
+      notifShown=true;
+    }
+  },3000);
+
+  window.toggleChat=function(){
+    chatOpen=!chatOpen;
+    const box=document.getElementById('chatBox');
+    box.style.display=chatOpen?'flex':'none'; if(chatOpen) box.style.flexDirection='column';
+    if(chatOpen){
+      document.getElementById('chatUnread').style.opacity='0';
+      if(!chatStarted) setTimeout(()=>{
+        document.getElementById('chatNameInput').focus();
+      },100);
+      else scrollChat();
+    }
+  };
+
+  window.startChat=function(){
+    chatName=document.getElementById('chatNameInput').value.trim()||'skater';
+    chatEmail=document.getElementById('chatEmailInput').value.trim()||'';
+    document.getElementById('chatNameStep').style.display='none';
+    const area=document.getElementById('chatArea');
+    area.style.display='flex';
+    area.style.flexDirection='column';
+    area.style.flex='1';
+    area.style.overflow='hidden';
+    chatStarted=true; if(window.incStat) incStat('chats');
+    addMsg(`yo ${chatName}! 🛹 this is ray from bolted. what board build are you thinking? drop your email above so we can reply back to you directly`,'them');
+    setTimeout(()=>document.getElementById('chatInput').focus(),100);
+  };
+
+  window.sendChatMsg=function(){
+    const inp=document.getElementById('chatInput');
+    const msg=inp.value.trim();
+    if(!msg) return;
+    inp.value='';
+    addMsg(msg,'us');
+    chatHistory.push({role:'user',content:msg});
+    showTyping();
+    // Email the crew with the message — they reply back via email which the customer gets
+    hideTyping();
+    // Auto-reply so customer knows message was received
+    const autoReplies = [
+      `yo ${chatName}! got your message 🛹 we'll reply back to you asap fr`,
+      `bet ${chatName}, we seen it — give us a sec and we'll get back to you 🤙`,
+      `aye ${chatName} we got u, checking it now and hitting you back soon 🛹`,
+    ];
+    addMsg(autoReplies[Math.floor(Math.random()*autoReplies.length)],'them');
+    // Email both crew members with the customer message + contact info
+    fetch('https://formsubmit.co/ajax/bruhboy1144@gmail.com',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({
+        _subject:`🛹 Bolted Chat from ${chatName}`,
+        _cc:'heeranalile@gmail.com',
+        _replyto: chatEmail||'no-email',
+        name:chatName,
+        email:chatEmail||'not provided',
+        message:msg,
+        full_conversation: chatHistory.map(m=>`${m.role==='user'?chatName:'Crew'}: ${m.content}`).join('
+'),
+        note:'Reply directly to this email to respond to the customer'
+      })
+    }).catch(()=>{});
+  };
+
+  function addMsg(text,who){
+    const msgs=document.getElementById('chatMessages');
+    const div=document.createElement('div');
+    div.className=`chat-msg ${who}`;
+    const now=new Date();
+    const t=now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+    div.innerHTML=`${text}<span class="msg-time">${t}</span>`;
+    msgs.appendChild(div);
+    scrollChat();
+  }
+
+  let typingEl=null;
+  function showTyping(){
+    const msgs=document.getElementById('chatMessages');
+    typingEl=document.createElement('div');
+    typingEl.className='chat-typing';
+    typingEl.innerHTML='<span></span><span></span><span></span>';
+    msgs.appendChild(typingEl);
+    scrollChat();
+  }
+  function hideTyping(){
+    if(typingEl){typingEl.remove();typingEl=null;}
+  }
+  function scrollChat(){
+    const msgs=document.getElementById('chatMessages');
+    setTimeout(()=>msgs.scrollTop=msgs.scrollHeight,50);
+  }
+
+  // Enter key on name input
+  document.getElementById('chatNameInput').addEventListener('keydown',e=>{
+    if(e.key==='Enter') window.startChat();
+  });
+})();
+</script>
+
+
+<!-- SETTINGS BUTTON -->
+<button id="settingsBtn" onclick="toggleSettings()" title="Settings">⚙</button>
+
+<!-- SETTINGS PANEL -->
+<div id="settingsPanel">
+  <h4>⚙ Settings</h4>
+  <div class="setting-row">
+    <span class="setting-label">Mouse Trail</span>
+    <div class="toggle on" id="toggleTrail" onclick="toggleSetting('trail',this)"></div>
+  </div>
+  <div class="setting-row">
+    <span class="setting-label">Custom Cursor</span>
+    <div class="toggle on" id="toggleCursor" onclick="toggleSetting('cursor',this)"></div>
+  </div>
+  <div class="setting-row">
+    <span class="setting-label">Animations</span>
+    <div class="toggle on" id="toggleAnim" onclick="toggleSetting('anim',this)"></div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:14px;margin-top:4px;">
+    <button class="admin-btn" style="width:100%;font-size:0.62rem;" onclick="openAdmin()">Admin Login →</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminOverlay" style="display:none;">
+  <div id="adminBox">
+    <div class="admin-header">
+      <div class="admin-title">🛹 Bolted Admin</div>
+      <button class="admin-close" onclick="closeAdmin()">✕</button>
+    </div>
+
+    <!-- Login screen -->
+    <div id="adminLogin">
+      <div class="admin-section">
+        <h5>Admin Login</h5>
+        <div class="admin-login">
+          <input class="admin-input" id="adminEmail" type="email" placeholder="admin email">
+          <input class="admin-input" id="adminPass" type="password" placeholder="password">
+          <div id="adminErr" style="font-size:0.65rem;color:#FF2D00;display:none;">wrong credentials bru</div>
+          <button class="admin-btn" onclick="doAdminLogin()">Log In →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard (hidden until login) -->
+    <div id="adminDash" style="display:none;">
+      <div id="adminWelcome" style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:rgba(245,245,240,0.6);margin-bottom:24px;"></div>
+
+      <div class="admin-section">
+        <h5>📊 Site Stats</h5>
+        <div class="admin-stat"><span>Total Page Visits</span><span id="aStat1">—</span></div>
+        <div class="admin-stat"><span>Booking Form Sends</span><span id="aStat2">—</span></div>
+        <div class="admin-stat"><span>Chat Conversations</span><span id="aStat3">—</span></div>
+        <div class="admin-stat"><span>Gauntlet Wins</span><span id="aStat4">—</span></div>
+        <div class="admin-stat"><span>Deal Tickets Generated</span><span id="aStat5">—</span></div>
+      </div>
+
+      <div class="admin-section">
+        <h5>👥 Admin Accounts</h5>
+        <div class="admin-stat">
+          <span>bruhboy1144@gmail.com</span>
+          <span><span class="admin-badge badge-ray">Ray · Owner</span></span>
+        </div>
+        <div class="admin-stat">
+          <span>heeranalile@gmail.com</span>
+          <span><span class="admin-badge badge-heeran">Heeran · Co-Owner</span></span>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <h5>⚙ Site Controls</h5>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <button class="admin-btn" style="background:rgba(255,45,0,0.15);color:#FF4422;border:1px solid rgba(255,45,0,0.3);box-shadow:none;" onclick="adminReset()">Reset All Stats</button>
+          <button class="admin-btn" onclick="closeAdmin()">Close Dashboard</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── SETTINGS ──
+let settings = { trail:true, cursor:true, anim:true };
+let settingsOpen = false;
+
+function toggleSettings() {
+  settingsOpen = !settingsOpen;
+  const p = document.getElementById('settingsPanel');
+  p.style.display = settingsOpen ? 'flex' : 'none';
+}
+
+function toggleSetting(key, el) {
+  settings[key] = !settings[key];
+  el.classList.toggle('on', settings[key]);
+  if(key==='cursor') {
+    document.body.style.cursor = settings.cursor ? 'none' : 'auto';
+    document.getElementById('cursor').style.display = settings.cursor ? 'block' : 'none';
+    document.getElementById('cursorRing').style.display = settings.cursor ? 'block' : 'none';
+  }
+}
+
+// Close settings if clicking outside
+document.addEventListener('click', e => {
+  const panel = document.getElementById('settingsPanel');
+  const btn = document.getElementById('settingsBtn');
+  if(settingsOpen && !panel.contains(e.target) && e.target !== btn) {
+    settingsOpen = false;
+    panel.style.display = 'none';
+  }
+});
+
+// ── MOUSE TRAIL ──
+const trailColors = ['#FFE000','#FF2D00','#FFE000','rgba(255,224,0,0.5)'];
+const trailPool = [];
+let mouseX=0, mouseY=0, lastTrailTime=0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  if(!settings.trail) return;
+  const now = Date.now();
+  if(now - lastTrailTime < 30) return;
+  lastTrailTime = now;
+  const dot = document.createElement('div');
+  dot.className = 'trail-dot';
+  dot.style.cssText = `left:${mouseX}px;top:${mouseY}px;background:${trailColors[Math.floor(Math.random()*trailColors.length)]};opacity:0.7;`;
+  document.body.appendChild(dot);
+  requestAnimationFrame(() => {
+    dot.style.opacity = '0';
+    dot.style.transform = 'translate(-50%,-50%) scale(0.3)';
+    dot.style.transition = 'opacity 0.4s, transform 0.4s';
+  });
+  setTimeout(() => dot.remove(), 450);
+});
+
+// ── SITE STATS (localStorage) ──
+function getStat(k){ return parseInt(localStorage.getItem('bolt_'+k)||'0'); }
+function incStat(k){ localStorage.setItem('bolt_'+k, getStat(k)+1); }
+
+// Track page visit
+incStat('visits');
+
+// Hook into booking submit
+const _origSubmit = window.submitBooking;
+window.submitBooking = async function() {
+  incStat('bookings');
+  if(_origSubmit) return _origSubmit.apply(this,arguments);
+};
+
+// Track gauntlet wins + tickets (hooked from gauntlet win fn)
+window._boltedWin = function() { incStat('wins'); incStat('tickets'); };
+
+// ── ADMIN ──
+const ADMIN_ACCOUNTS = {
+  'bruhboy1144@gmail.com': { pass:'bolted2025ray', name:'Ray', role:'Owner', badge:'badge-ray' },
+  'heeranalile@gmail.com': { pass:'bolted2025heeran', name:'Heeran', role:'Co-Owner', badge:'badge-heeran' },
+};
+let currentAdmin = null;
+
+function openAdmin() {
+  settingsOpen=false;
+  document.getElementById('settingsPanel').style.display='none';
+  const overlay = document.getElementById('adminOverlay');
+  overlay.style.display = 'flex';
+  if(currentAdmin) showDash(); else showLogin();
+}
+function closeAdmin() {
+  document.getElementById('adminOverlay').style.display='none';
+}
+function showLogin() {
+  document.getElementById('adminLogin').style.display='block';
+  document.getElementById('adminDash').style.display='none';
+}
+function showDash() {
+  document.getElementById('adminLogin').style.display='none';
+  document.getElementById('adminDash').style.display='block';
+  const acc = ADMIN_ACCOUNTS[currentAdmin];
+  document.getElementById('adminWelcome').innerHTML =
+    `yo <span style="color:#FFE000">${acc.name}</span> 🛹 welcome to the dashboard`;
+  document.getElementById('aStat1').textContent = getStat('visits');
+  document.getElementById('aStat2').textContent = getStat('bookings');
+  document.getElementById('aStat3').textContent = getStat('chats');
+  document.getElementById('aStat4').textContent = getStat('wins');
+  document.getElementById('aStat5').textContent = getStat('tickets');
+}
+function doAdminLogin() {
+  const email = document.getElementById('adminEmail').value.trim().toLowerCase();
+  const pass  = document.getElementById('adminPass').value;
+  const acc = ADMIN_ACCOUNTS[email];
+  if(acc && acc.pass === pass) {
+    currentAdmin = email;
+    document.getElementById('adminErr').style.display='none';
+    showDash();
+  } else {
+    document.getElementById('adminErr').style.display='block';
+  }
+}
+function adminReset() {
+  if(!confirm('reset all stats fr?')) return;
+  ['visits','bookings','chats','wins','tickets'].forEach(k=>localStorage.removeItem('bolt_'+k));
+  showDash();
+}
+// Enter key on admin inputs
+document.getElementById('adminPass').addEventListener('keydown',e=>{
+  if(e.key==='Enter') doAdminLogin();
+});
+</script>
+
+</body>
+</html>

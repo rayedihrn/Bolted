@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Checkout</title>
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      text-align: center;
+    }
+
+    form {
+      width: 400px;
+      margin: 0 auto;
+    }
+
+    #card-element {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #5469d4;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Card Payment</h2>
+<p>Pay with your card or use PayPal</p>
+
+<!-- PayPal Button -->
+<p><b>Pay with PayPal:</b></p>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+  <input type="hidden" name="cmd" value="_xclick">
+  <input type="hidden" name="business" value="your-paypal-email@example.com">
+  <input type="hidden" name="item_name" value="Custom Skateboard">
+  <input type="hidden" name="amount" value="40.00">
+  <input type="hidden" name="currency_code" value="USD">
+  <button type="submit" style="padding: 10px 20px; font-size: 16px; background: #FFCC00; border: none; cursor: pointer;">Pay $40 with PayPal</button>
+</form>
+
+<p><strong>OR</strong></p>
+
+<!-- Stripe Card Payment -->
+<form id="payment-form">
+  <div id="card-element"><!-- Stripe Card Element renders here --></div>
+  <button id="submit">Pay with Card</button>
+</form>
+
+<p id="payment-message" style="color: green; display: none;">Payment successful!</p>
+<p id="error-message" style="color: red; display: none;"></p>
+
+<script>
+const stripe = Stripe("YOUR_PUBLIC_KEY");
+
+// Set up Stripe Elements
+const elements = stripe.elements();
+const cardElement = elements.create("card");
+cardElement.mount("#card-element");
+
+const form = document.getElementById("payment-form");
+const paymentMessage = document.getElementById("payment-message");
+const errorMessage = document.getElementById("error-message");
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  // Call backend to create a payment intent
+  const { clientSecret } = await fetch("/create-payment-intent", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ amount: 1000 }), // Example: $10.00 -> 1000 cents
+  }).then((res) => res.json());
+
+  // Confirm the payment
+  const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+    payment_method: {
+      card: cardElement,
+    },
+  });
+
+  if (error) {
+    errorMessage.style.display = "block";
+    errorMessage.textContent = error.message;
+  } else if (paymentIntent.status === "succeeded") {
+    paymentMessage.style.display = "block";
+    errorMessage.style.display = "none";
+  }
+});
+</script>
+
+</body>
+</html>
